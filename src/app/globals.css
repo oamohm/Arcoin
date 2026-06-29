@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* â”€â”€ DESIGN TOKENS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+:root {
+  --font-sans:    var(--font-inter), -apple-system, sans-serif;
+  --font-display: var(--font-display), var(--font-inter), sans-serif;
+  --font-mono:    var(--font-mono), 'Fira Code', monospace;
+
+  --bg:         #0A0E1A;
+  --surface:    #0F1629;
+  --surface2:   #141D35;
+  --border:     #1E2D45;
+  --cyan:       #22D3EE;
+  --cyan-dim:   #22D3EE44;
+  --cyan-glow:  #22D3EE18;
+  --amber:      #F59E0B;
+  --green:      #10B981;
+  --red:        #EF4444;
+  --text:       #E2E8F0;
+  --text-dim:   #64748B;
+  --text-muted: #334155;
+
+  --radius:     12px;
+  --radius-lg:  18px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* â”€â”€ RESET â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+* { box-sizing: border-box; }
+
+html, body {
+  background:   var(--bg);
+  color:        var(--text);
+  font-family:  var(--font-sans);
+  min-height:   100dvh;
+  overflow-x:   hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* â”€â”€ SCROLLBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+::-webkit-scrollbar       { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* â”€â”€ TYPOGRAPHY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.font-display { font-family: var(--font-display); }
+.font-mono    { font-family: var(--font-mono); }
+
+/* â”€â”€ SCAN LINE ANIMATION (signature element) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@keyframes scan-line {
+  0%        { top: 0%;   opacity: 0;   }
+  5%        { opacity: 0.6; }
+  50%       { top: 100%; opacity: 0.6; }
+  55%, 100% { top: 100%; opacity: 0;   }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1;   }
+  50%      { opacity: 0.3; }
+}
+
+@keyframes stream-pulse {
+  0%, 100% { opacity: 1;   transform: translateY(-50%) scale(1);   }
+  50%      { opacity: 0.4; transform: translateY(-50%) scale(0.65); }
+}
+
+@keyframes logo-glow {
+  0%, 100% { box-shadow: 0 0 12px #22D3EE22; }
+  50%      { box-shadow: 0 0 32px #22D3EE44, 0 0 56px #22D3EE18; }
+}
+
+@keyframes toast-in {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes modal-in {
+  from { transform: translateY(16px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(0)    scale(1);    opacity: 1; }
+}
+
+/* â”€â”€ COMPONENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.arc-card {
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.arc-input {
+  width:         100%;
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-radius: var(--radius);
+  padding:       14px 16px;
+  color:         var(--text);
+  font-family:   var(--font-mono);
+  font-size:     13px;
+  outline:       none;
+  transition:    border-color 0.2s;
+}
+.arc-input:focus { border-color: var(--cyan-dim); }
+.arc-input::placeholder { color: var(--text-muted); }
+
+.btn-primary {
+  width:         100%;
+  background:    var(--cyan);
+  color:         #0A0E1A;
+  font-weight:   700;
+  font-size:     15px;
+  border:        none;
+  border-radius: var(--radius);
+  padding:       14px;
+  cursor:        pointer;
+  transition:    all 0.15s;
+  font-family:   var(--font-sans);
+}
+.btn-primary:hover  { background: #38BDF8; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled {
+  background: var(--border);
+  color: var(--text-dim);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  width:         100%;
+  background:    transparent;
+  color:         var(--text-dim);
+  font-size:     13px;
+  border:        1px solid var(--border);
+  border-radius: var(--radius);
+  padding:       12px;
+  cursor:        pointer;
+  transition:    all 0.15s;
+}
+.btn-secondary:hover { border-color: var(--cyan-dim); color: var(--text); }
+
+/* â”€â”€ REDUCE MOTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
