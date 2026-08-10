@@ -38,14 +38,17 @@ const nextConfig = {
       tls:    false,
       crypto: false,
     }
-    // Coinbase CDP SDK (pulled in transitively via wagmi connectors) references
-    // optional x402 payment packages that Arcoin does not use and are not
-    // installed. Without this, webpack fails the build trying to resolve them.
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      "@x402/evm": false,
-      "@x402/svm/exact/client": false,
-    }
+    // Coinbase CDP SDK (pulled in transitively via wagmi connectors -> @base-org/account)
+    // references an entire family of optional x402 payment packages that Arcoin
+    // does not use and that are not installed. Rather than allowlisting each
+    // sub-path one at a time as the build discovers them, ignore the whole
+    // @x402/* namespace so webpack stops trying to resolve any of it.
+    const webpack = require("webpack")
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^@x402\//,
+      })
+    )
     return config
   },
 }
