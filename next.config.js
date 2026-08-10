@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
 
@@ -9,9 +9,9 @@ const nextConfig = {
         source: "/(.*)",
         headers: [
           { key: "X-Frame-Options",           value: "DENY" },
-          { key: "X-Content-Type-Options",     value: "nosniff" },
-          { key: "Referrer-Policy",            value: "strict-origin-when-cross-origin" },
-          { key: "Permissions-Policy",         value: "camera=(), microphone=(), geolocation=()" },
+          { key: "X-Content-Type-Options",    value: "nosniff" },
+          { key: "Referrer-Policy",           value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy",        value: "camera=(), microphone=(), geolocation=()" },
           {
             key: "Content-Security-Policy",
             value: [
@@ -37,6 +37,14 @@ const nextConfig = {
       net:    false,
       tls:    false,
       crypto: false,
+    }
+    // Coinbase CDP SDK (pulled in transitively via wagmi connectors) references
+    // optional x402 payment packages that Arcoin does not use and are not
+    // installed. Without this, webpack fails the build trying to resolve them.
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@x402/evm": false,
+      "@x402/svm/exact/client": false,
     }
     return config
   },
