@@ -3,58 +3,61 @@ import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"
 import { Providers } from "./providers"
 import "./globals.css"
 
-// â”€â”€ FONTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// FONTS (preload: false added to prevent build timeout on vercel)
 const inter = Inter({
-  subsets:  ["latin"],
+  subsets: ["latin"],
   variable: "--font-inter",
-  display:  "swap",
+  display: "swap",
+  preload: false,
 })
 
 const spaceGrotesk = Space_Grotesk({
-  subsets:  ["latin"],
+  subsets: ["latin"],
   variable: "--font-display",
-  display:  "swap",
+  display: "swap",
+  preload: false,
 })
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets:  ["latin"],
+  subsets: ["latin"],
   variable: "--font-mono",
-  display:  "swap",
+  display: "swap",
+  preload: false,
 })
 
-// â”€â”€ METADATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// METADATA
 export const metadata: Metadata = {
-  title:       "Arcoin â€” DeFi Operating System",
-  description: "Arc Network à¤•à¤¾ native payment, streaming, à¤”à¤° swap hubà¥¤ Send Â· Stream Â· Swap.",
-  manifest:    "/manifest.json",
-  keywords:    ["DeFi", "Arc Network", "USDC", "Payment Streaming", "Web3"],
-  authors:     [{ name: "Arcoin" }],
-  robots:      "noindex",   // testnet â€” don't index
+  title: "Arcoin — DeFi Operating System",
+  description: "Arc Network native payment, streaming, swap hub. Send, Stream, Swap.",
+  manifest: "/manifest.json",
+  keywords: ["DeFi", "Arc Network", "USDC", "Payment Streaming", "Web3"],
+  authors: [{ name: "Arcoin" }],
+  robots: "noindex",
   icons: {
-    icon:   [
-      { url: "/icons/icon-32.png",  sizes: "32x32"  },
+    icon: [
+      { url: "/icons/icon-32.png", sizes: "32x32" },
       { url: "/icons/icon-192.png", sizes: "192x192" },
     ],
     apple: "/icons/apple-touch-icon.png",
   },
   openGraph: {
-    title:       "Arcoin â€” DeFi Operating System",
-    description: "Arc Network à¤•à¤¾ native payment hub",
-    type:        "website",
-    siteName:    "Arcoin",
+    title: "Arcoin — DeFi Operating System",
+    description: "Arc Network native payment hub",
+    type: "website",
+    siteName: "Arcoin",
   },
 }
 
 export const viewport: Viewport = {
-  themeColor:          "#0A0E1A",
-  width:               "device-width",
-  initialScale:        1,
-  maximumScale:        1,   // prevent zoom on input focus (mobile UX)
-  userScalable:        false,
-  viewportFit:         "cover",  // safe area on notched phones
+  themeColor: "#0A1E1A",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 }
 
-// â”€â”€ ROOT LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ROOT LAYOUT
 export default function RootLayout({
   children,
 }: {
@@ -62,22 +65,18 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="hi"
+      lang="en"
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
     >
       <head>
-        {/* PWA iOS support */}
-        <meta name="apple-mobile-web-app-capable"            content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style"   content="black-translucent" />
-        <meta name="apple-mobile-web-app-title"              content="Arcoin" />
-        {/* Preconnect to Arc RPC for faster first tx */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Arcoin" />
         <link rel="preconnect" href="https://rpc.testnet.arc.network" />
         <link rel="preconnect" href="https://atlas.blockscout.com" />
       </head>
       <body className="bg-arc-bg antialiased">
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
