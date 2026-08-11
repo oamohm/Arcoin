@@ -6,7 +6,7 @@
 
 import { useState, useCallback }  from "react"
 import { usePrivy }                from "@privy-io/react-auth"
-import QRCode                      from "qrcode.react"
+import { QRCode }                  from "qrcode.react"
 import { useSendPayment }          from "@/hooks/useSendPayment"
 import { useArcBalance }           from "@/hooks/useArcBalance"
 import { useArcScan }              from "@/hooks/useArcScan"

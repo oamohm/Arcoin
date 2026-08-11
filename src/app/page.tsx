@@ -21,6 +21,10 @@ import { WelcomeModal,
 import { SendScreen,
          ReceiveScreen,
          AuditScreen }         from "@/components/payment/PaymentScreens"
+import { SwapScreen }          from "@/components/payment/SwapScreen"
+import { EscrowScreen }        from "@/components/payment/EscrowScreen"
+import { StreamScreen }        from "@/components/streaming/StreamScreen"
+import { ResourcesScreen }     from "@/components/resources/ResourcesScreen"
 import type { AppTab, TxState } from "@/types"
 
 export default function Home() {

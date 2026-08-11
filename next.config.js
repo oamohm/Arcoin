@@ -1,4 +1,4 @@
-/** @type {import("next").NextConfig} */
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
 
@@ -9,9 +9,9 @@ const nextConfig = {
         source: "/(.*)",
         headers: [
           { key: "X-Frame-Options",           value: "DENY" },
-          { key: "X-Content-Type-Options",    value: "nosniff" },
-          { key: "Referrer-Policy",           value: "strict-origin-when-cross-origin" },
-          { key: "Permissions-Policy",        value: "camera=(), microphone=(), geolocation=()" },
+          { key: "X-Content-Type-Options",     value: "nosniff" },
+          { key: "Referrer-Policy",            value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy",         value: "camera=(), microphone=(), geolocation=()" },
           {
             key: "Content-Security-Policy",
             value: [
@@ -47,6 +47,12 @@ const nextConfig = {
     config.plugins.push(
       new webpack.IgnorePlugin({
         resourceRegExp: /^@x402\//,
+      }),
+      // MetaMask SDK (pulled in transitively via wagmi connectors) optionally
+      // imports React Native's async-storage for use inside React Native apps.
+      // This is a web app, so that package is never installed; ignore it too.
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^@react-native-async-storage\/async-storage$/,
       })
     )
     return config
