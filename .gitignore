@@ -29,4 +29,3 @@ next-env.d.ts
 
 # Test
 coverage/
-.github/workflows/

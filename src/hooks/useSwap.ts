@@ -1,14 +1,14 @@
 "use client"
 /**
- * ARCOIN â€” useSwap.ts
+ * ARCOIN — useSwap.ts
  * APEXISWAP swap engine integration.
  *
  * Routing logic (determineSwapPath):
- *   USDC â†” EURC  â†’  StableFX (Circle official)
- *   Cross-chain   â†’  CCTP Bridge
- *   Everything else â†’  APEXISWAP Router
+ *   USDC ↔ EURC  →  StableFX (Circle official)
+ *   Cross-chain   →  CCTP Bridge
+ *   Everything else →  APEXISWAP Router
  *
- * Flow: getQuote â†’ approveIfNeeded â†’ simulate â†’ execute â†’ confirm
+ * Flow: getQuote → approveIfNeeded → simulate → execute → confirm
  */
 
 import { useState, useCallback, useRef } from "react"
@@ -21,7 +21,7 @@ import { parseError }                             from "@/lib/errors"
 import { requireCleanAddress }                    from "@/lib/compliance"
 import type { SwapQuote, SwapPath, TxState }      from "@/types"
 
-// â”€â”€ APEXISWAP ROUTER ABI (Uniswap V2 style) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── APEXISWAP ROUTER ABI (Uniswap V2 style) ─────────────────
 const APEXISWAP_ABI = [
   {
     name: "getAmountsOut",
@@ -48,7 +48,7 @@ const APEXISWAP_ABI = [
   },
 ] as const
 
-// â”€â”€ ERC-20 APPROVE ABI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── ERC-20 APPROVE ABI ───────────────────────────────────────
 const APPROVE_ABI = [
   {
     name: "approve",
@@ -72,7 +72,7 @@ const APPROVE_ABI = [
   },
 ] as const
 
-// â”€â”€ PATH ROUTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PATH ROUTER ──────────────────────────────────────────────
 function determineSwapPath(
   tokenIn:  `0x${string}`,
   tokenOut: `0x${string}`,
@@ -87,10 +87,10 @@ function determineSwapPath(
   return "apexiswap"
 }
 
-// â”€â”€ DEADLINE â€” 30s from now â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── DEADLINE — 30s from now ──────────────────────────────────
 const deadline30s = () => BigInt(Math.floor(Date.now() / 1000) + 30)
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 interface UseSwap {
   getQuote:    (amountIn: string, tokenIn: `0x${string}`, tokenOut: `0x${string}`) => Promise<SwapQuote | null>
   executeSwap: (quote: SwapQuote, slippageBps?: number) => Promise<void>
@@ -116,7 +116,7 @@ export function useSwap(): UseSwap {
     if (expiryTimer.current) clearInterval(expiryTimer.current)
   }, [])
 
-  // â”€â”€ GET QUOTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── GET QUOTE ──────────────────────────────────────────────
   const getQuote = useCallback(async (
     amountIn: string,
     tokenIn:  `0x${string}`,
@@ -133,7 +133,7 @@ export function useSwap(): UseSwap {
       const routerAddr  = APEXISWAP.Router
       const swapPath    = [tokenIn, tokenOut]
 
-      // getAmountsOut â€” read only, free
+      // getAmountsOut — read only, free
       const amounts = await publicClient.readContract({
         address:      routerAddr,
         abi:          APEXISWAP_ABI,
@@ -184,7 +184,7 @@ export function useSwap(): UseSwap {
     }
   }, [publicClient])
 
-  // â”€â”€ EXECUTE SWAP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── EXECUTE SWAP ───────────────────────────────────────────
   const executeSwap = useCallback(async (
     q: SwapQuote,
     slippageBps = 50,   // 0.5% default
@@ -193,7 +193,7 @@ export function useSwap(): UseSwap {
     if (!walletAddress || !publicClient) {
       setTxState({ status: "failed",
         error: { code: "privy_session_expired",
-                 message: "Session expire à¤¹à¥‹ à¤—à¤ˆà¥¤ à¤¦à¥‹à¤¬à¤¾à¤°à¤¾ sign in à¤•à¤°à¥‡à¤‚à¥¤" } })
+                 message: "Session expire हो गई। दोबारा sign in करें।" } })
       return
     }
 
@@ -201,7 +201,7 @@ export function useSwap(): UseSwap {
     if (Math.floor(Date.now() / 1000) >= q.expiresAt) {
       setTxState({ status: "failed",
         error: { code: "quote_expired",
-                 message: "Quote expire à¤¹à¥‹ à¤—à¤ˆà¥¤ à¤¨à¤ˆ quote à¤²à¥‡ à¤°à¤¹à¥‡ à¤¹à¥ˆà¤‚..." } })
+                 message: "Quote expire हो गई। नई quote ले रहे हैं..." } })
       return
     }
 
@@ -210,7 +210,7 @@ export function useSwap(): UseSwap {
 
       const amountOutMin = applySlippage(q.amountOutRaw, slippageBps)
 
-      // â”€â”€ Step 1: Check allowance â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Step 1: Check allowance ────────────────────────
       const currentAllowance = await publicClient.readContract({
         address:      q.tokenIn,
         abi:          APPROVE_ABI,
@@ -218,7 +218,7 @@ export function useSwap(): UseSwap {
         args:         [walletAddress, APEXISWAP.Router],
       }) as bigint
 
-      // â”€â”€ Step 2: Approve if needed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Step 2: Approve if needed ──────────────────────
       if (currentAllowance < q.amountInRaw) {
         setTxState({ status: "signing" })
 
@@ -235,7 +235,7 @@ export function useSwap(): UseSwap {
         })
       }
 
-      // â”€â”€ Step 3: Simulate swap â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Step 3: Simulate swap ──────────────────────────
       setTxState({ status: "simulating" })
 
       await publicClient.simulateContract({
@@ -246,7 +246,7 @@ export function useSwap(): UseSwap {
         account:      walletAddress,
       })
 
-      // â”€â”€ Step 4: Execute â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Step 4: Execute ────────────────────────────────
       setTxState({ status: "signing" })
 
       const swapTx = await writeContractAsync({
@@ -256,7 +256,7 @@ export function useSwap(): UseSwap {
         args:         [q.amountInRaw, amountOutMin, q.route, walletAddress, deadline30s()],
       })
 
-      // â”€â”€ Step 5: Confirm â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Step 5: Confirm ────────────────────────────────
       setTxState({ status: "confirming", hash: swapTx })
 
       await publicClient.waitForTransactionReceipt({

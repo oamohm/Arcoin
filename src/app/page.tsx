@@ -1,9 +1,9 @@
 "use client"
 /**
- * ARCOIN â€” page.tsx
+ * ARCOIN — page.tsx
  * Root entry point. Handles:
- *   - Unauthenticated â†’ Connect Screen
- *   - Authenticated   â†’ Dashboard (with Welcome modal first-time)
+ *   - Unauthenticated → Connect Screen
+ *   - Authenticated   → Dashboard (with Welcome modal first-time)
  *
  * All navigation state lives here and is passed down as props.
  * No router needed for single-page app feel.
@@ -59,12 +59,12 @@ export default function Home() {
           border: "1.5px solid var(--cyan)", background: "var(--cyan-glow)",
           display: "flex", alignItems: "center", justifyContent: "center",
           fontSize: "20px", animation: "logo-glow 1.5s ease-in-out infinite",
-        }}>â—ˆ</div>
+        }}>◈</div>
       </div>
     )
   }
 
-  // Not connected â†’ full connect screen
+  // Not connected → full connect screen
   if (!authenticated) {
     return (
       <ToastProvider>
@@ -97,7 +97,7 @@ export default function Home() {
         background:    "var(--bg)",
       }}>
 
-        {/* â”€â”€ ACTIVE SCREEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── ACTIVE SCREEN ─────────────────────────── */}
         <div style={{
           flex:          1,
           display:       "flex",
@@ -121,15 +121,15 @@ export default function Home() {
           {tab === "more"      && <MoreScreen       onNavigate={navigate} />}
         </div>
 
-        {/* â”€â”€ BOTTOM NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── BOTTOM NAV ────────────────────────────── */}
         <BottomNav activeTab={tab} onNavigate={navigate} />
 
-        {/* â”€â”€ WELCOME MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── WELCOME MODAL ─────────────────────────── */}
         {showWelcome && (
           <WelcomeModal onClose={() => setWelcome(false)} />
         )}
 
-        {/* â”€â”€ GLOBAL TX STATUS OVERLAY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── GLOBAL TX STATUS OVERLAY ──────────────── */}
         <TxStatusBar
           txState={globalTxState}
           label={globalTxLabel}
@@ -141,7 +141,7 @@ export default function Home() {
   )
 }
 
-// â”€â”€ PLACEHOLDER (temporary for Phase 2 screens) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PLACEHOLDER (temporary for Phase 2 screens) ──────────────
 function PlaceholderScreen({
   title, subtitle, onNavigate,
 }: { title: string; subtitle: string; onNavigate: (s: string) => void }) {
@@ -155,7 +155,7 @@ function PlaceholderScreen({
         <button
           onClick={() => onNavigate("dashboard")}
           style={{ background: "none", border: "none", color: "var(--text-dim)", fontSize: "20px", cursor: "pointer" }}
-        >â†</button>
+        >←</button>
         <span style={{ fontFamily: "var(--font-mono)", fontSize: "13px", letterSpacing: "0.1em",
                        color: "var(--text)", textTransform: "uppercase" }}>
           {title}
@@ -163,7 +163,7 @@ function PlaceholderScreen({
       </div>
       <div style={{ flex: 1, display: "flex", flexDirection: "column",
                     alignItems: "center", justifyContent: "center", padding: "40px 24px", textAlign: "center" }}>
-        <div style={{ fontSize: "40px", marginBottom: "16px" }}>âŸ³</div>
+        <div style={{ fontSize: "40px", marginBottom: "16px" }}>⟳</div>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "13px", color: "var(--text-dim)" }}>
           {subtitle}
         </p>

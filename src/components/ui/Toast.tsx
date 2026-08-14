@@ -1,6 +1,6 @@
 "use client"
 /**
- * ARCOIN â€” Toast.tsx
+ * ARCOIN — Toast.tsx
  * Notification toasts with Blockscout tx link support.
  * Usage: import { useToast } from "@/components/ui/Toast"
  */
@@ -9,7 +9,7 @@ import { useState, useCallback, createContext, useContext, useRef } from "react"
 import { EXPLORER } from "@/lib/constants"
 import type { ToastMessage } from "@/types"
 
-// â”€â”€ CONTEXT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CONTEXT ──────────────────────────────────────────────────
 interface ToastCtx {
   success: (title: string, txHash?: `0x${string}`) => void
   error:   (title: string, message?: string) => void
@@ -25,7 +25,7 @@ export function useToast(): ToastCtx {
   return ctx
 }
 
-// â”€â”€ PROVIDER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PROVIDER ─────────────────────────────────────────────────
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<ToastMessage[]>([])
   const timers = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map())
@@ -49,7 +49,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     warn:    (title, message) => add({ type: "warning", title, message }),
   }
 
-  const ICONS  = { success: "âœ“", error: "âœ•", info: "â„¹", warning: "âš " }
+  const ICONS  = { success: "✓", error: "✕", info: "ℹ", warning: "⚠ " }
   const COLORS = {
     success: { border: "var(--green)", icon: "#10B98120" },
     error:   { border: "var(--red)",   icon: "#EF444420" },
@@ -61,7 +61,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     <ToastContext.Provider value={ctx}>
       {children}
 
-      {/* Toast container â€” above bottom nav */}
+      {/* Toast container — above bottom nav */}
       <div style={{
         position:  "fixed",
         bottom:    "calc(80px + env(safe-area-inset-bottom, 0px))",
@@ -122,7 +122,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                       marginTop:      "2px",
                     }}
                   >
-                    Blockscout à¤ªà¤° à¤¦à¥‡à¤–à¥‡à¤‚ â†—
+                    Blockscout पर देखें ↗
                   </a>
                 ) : t.message ? (
                   <p style={{ fontSize: "12px", color: "var(--text-dim)", marginTop: "2px" }}>

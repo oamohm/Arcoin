@@ -1,5 +1,5 @@
 /**
- * ARCOIN â€” usdc.ts
+ * ARCOIN — usdc.ts
  * SINGLE SOURCE OF TRUTH for all USDC math.
  *
  * RULE: Nothing in this codebase does amount math directly.
@@ -7,16 +7,16 @@
  *
  * Arc decimal trap:
  *   Native gas layer = 18 decimals (internal EVM)
- *   ERC-20 interface = 6 decimals  â† we ALWAYS use this
+ *   ERC-20 interface = 6 decimals  ← we ALWAYS use this
  */
 
 import { formatUnits, parseUnits } from "viem"
 
 export const USDC_DECIMALS = 6 as const
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// PARSE â€” User input string â†’ BigInt for contract calls
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
+// PARSE — User input string → BigInt for contract calls
+// ─────────────────────────────────────────────────────────────
 export function parseUSDC(amount: string | number): bigint {
   try {
     const str = String(amount).trim()
@@ -29,15 +29,15 @@ export function parseUSDC(amount: string | number): bigint {
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// FORMAT â€” BigInt from contract â†’ Human-readable string
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
+// FORMAT — BigInt from contract → Human-readable string
+// ─────────────────────────────────────────────────────────────
 export function formatUSDC(
   raw: bigint,
   options: {
     decimals?: number    // display decimal places (default 2)
     showSymbol?: boolean // append " USDC" (default true)
-    compact?: boolean    // 1,240 â†’ "1.24K" (default false)
+    compact?: boolean    // 1,240 → "1.24K" (default false)
   } = {}
 ): string {
   const { decimals = 2, showSymbol = true, compact = false } = options
@@ -59,18 +59,18 @@ export function formatUSDC(
   return showSymbol ? `${display} USDC` : display
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// SLIPPAGE â€” Apply basis-point slippage to an amount
+// ─────────────────────────────────────────────────────────────
+// SLIPPAGE — Apply basis-point slippage to an amount
 // bps: 50 = 0.5%, 100 = 1%, 200 = 2%
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export function applySlippage(amount: bigint, bps: number): bigint {
   if (bps < 0 || bps > 10000) throw new Error("Invalid slippage bps")
   return (amount * BigInt(10000 - bps)) / 10000n
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// VALIDATE â€” Check if a string is a valid USDC amount
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
+// VALIDATE — Check if a string is a valid USDC amount
+// ─────────────────────────────────────────────────────────────
 export function isValidUSDCAmount(amount: string): boolean {
   const num = Number(amount)
   if (isNaN(num) || num <= 0) return false
@@ -84,9 +84,9 @@ export function isValidUSDCAmount(amount: string): boolean {
   return true
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// STREAM RATE â€” Calculate per-second rate for streaming
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
+// STREAM RATE — Calculate per-second rate for streaming
+// ─────────────────────────────────────────────────────────────
 export function calculateStreamRate(
   totalAmount: string,
   durationDays: number
@@ -101,9 +101,9 @@ export function calculateStreamRate(
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// STREAM PROGRESS â€” Calculate % streamed given start/end time
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
+// STREAM PROGRESS — Calculate % streamed given start/end time
+// ─────────────────────────────────────────────────────────────
 export function calculateStreamProgress(
   startTime: number,  // unix seconds
   endTime: number,    // unix seconds
@@ -115,10 +115,10 @@ export function calculateStreamProgress(
   return Math.floor(((now - startTime) / (endTime - startTime)) * 100)
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// ARCOIN PROOF â€” Format amount for receipt/audit documents
+// ─────────────────────────────────────────────────────────────
+// ARCOIN PROOF — Format amount for receipt/audit documents
 // Returns the full 6-decimal representation for legal accuracy
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export function formatUSDCProof(raw: bigint): string {
   return formatUnits(raw, USDC_DECIMALS)  // full precision, no rounding
 }

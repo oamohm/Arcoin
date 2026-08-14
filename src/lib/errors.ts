@@ -1,52 +1,52 @@
 /**
- * ARCOIN â€” errors.ts
- * Converts raw blockchain/wallet errors â†’ plain language ArcoinErrors.
+ * ARCOIN — errors.ts
+ * Converts raw blockchain/wallet errors → plain language ArcoinErrors.
  * All UI error messages come from here. Never show raw revert strings.
  */
 
 import type { ArcoinError, ArcoinErrorCode } from "@/types"
 import { EXPLORER } from "./constants"
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 // ERROR MESSAGE MAP
 // Plain language, active voice, actionable
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 const ERROR_MESSAGES: Record<ArcoinErrorCode, string> = {
   insufficient_balance:
-    "Balance à¤•à¤® à¤¹à¥ˆà¥¤ à¤Ÿà¥à¤°à¤¾à¤‚à¤œà¥ˆà¤•à¥à¤¶à¤¨ à¤°à¤¾à¤¶à¤¿ à¤”à¤° à¤—à¥ˆà¤¸ à¤«à¥€à¤¸ à¤•à¥‡ à¤²à¤¿à¤ à¤ªà¤°à¥à¤¯à¤¾à¤ªà¥à¤¤ USDC à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆà¥¤",
+    "Balance कम है। ट्रांजैक्शन राशि और गैस फीस के लिए पर्याप्त USDC नहीं है।",
   invalid_address:
-    "à¤¯à¤¹ address valid à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆà¥¤ à¤¦à¥‹à¤¬à¤¾à¤°à¤¾ check à¤•à¤°à¥‡à¤‚à¥¤",
+    "यह address valid नहीं है। दोबारा check करें।",
   amount_too_small:
-    "Minimum amount 0.01 USDC à¤¹à¥ˆà¥¤",
+    "Minimum amount 0.01 USDC है।",
   amount_too_large:
-    "Single transaction limit 1,000,000 USDC à¤¹à¥ˆà¥¤",
+    "Single transaction limit 1,000,000 USDC है।",
   rpc_timeout:
-    "Arc Network à¤¸à¥‡ connection slow à¤¹à¥ˆà¥¤ 30 seconds à¤¬à¤¾à¤¦ retry à¤•à¤°à¥‡à¤‚à¥¤",
+    "Arc Network से connection slow है। 30 seconds बाद retry करें।",
   transaction_reverted:
-    "Transaction reject à¤¹à¥à¤ˆà¥¤ Details Blockscout à¤ªà¤° à¤¦à¥‡à¤–à¥‡à¤‚à¥¤",
+    "Transaction reject हुई। Details Blockscout पर देखें।",
   user_rejected:
-    "Transaction cancel à¤•à¥€ à¤—à¤ˆà¥¤",
+    "Transaction cancel की गई।",
   privy_session_expired:
-    "Session expire à¤¹à¥‹ à¤—à¤ˆà¥¤ à¤¦à¥‹à¤¬à¤¾à¤°à¤¾ sign in à¤•à¤°à¥‡à¤‚à¥¤",
+    "Session expire हो गई। दोबारा sign in करें।",
   quote_expired:
-    "Swap quote expire à¤¹à¥‹ à¤—à¤ˆà¥¤ à¤¨à¤ˆ quote à¤²à¥‡ à¤°à¤¹à¥€ à¤¹à¥ˆ...",
+    "Swap quote expire हो गई। नई quote ले रही है...",
   slippage_exceeded:
-    "Price à¤®à¥‡à¤‚ à¤¬à¤¹à¥à¤¤ à¤œà¤¼à¥à¤¯à¤¾à¤¦à¤¾ à¤¬à¤¦à¤²à¤¾à¤µ à¤†à¤¯à¤¾à¥¤ Slippage limit à¤¬à¤¢à¤¼à¤¾à¤à¤‚à¥¤",
+    "Price में बहुत ज़्यादा बदलाव आया। Slippage limit बढ़ाएं।",
   ofac_blocked:
-    "à¤¯à¤¹ address à¤ªà¥à¤°à¤¤à¤¿à¤¬à¤‚à¤§à¤¿à¤¤ à¤¹à¥ˆà¥¤ Transaction à¤¨à¤¹à¥€à¤‚ à¤¹à¥‹ à¤¸à¤•à¤¤à¥€à¥¤",
+    "यह address प्रतिबंधित है। Transaction नहीं हो सकती।",
   network_mismatch:
-    "Arc Testnet à¤ªà¤° switch à¤•à¤°à¥‡à¤‚ à¤”à¤° à¤¦à¥‹à¤¬à¤¾à¤°à¤¾ try à¤•à¤°à¥‡à¤‚à¥¤",
+    "Arc Testnet पर switch करें और दोबारा try करें।",
   contract_not_deployed:
-    "Contract à¤…à¤­à¥€ deploy à¤¨à¤¹à¥€à¤‚ à¤¹à¥à¤†à¥¤ Team à¤•à¥‹ report à¤•à¤°à¥‡à¤‚à¥¤",
+    "Contract अभी deploy नहीं हुआ। Team को report करें।",
   stream_already_cancelled:
-    "à¤¯à¤¹ stream à¤ªà¤¹à¤²à¥‡ à¤¸à¥‡ cancel à¤¹à¥‹ à¤šà¥à¤•à¥€ à¤¹à¥ˆà¥¤",
+    "यह stream पहले से cancel हो चुकी है।",
   unknown:
-    "à¤•à¥à¤› à¤—à¤²à¤¤ à¤¹à¥à¤†à¥¤ Page refresh à¤•à¤°à¥‡à¤‚ à¤”à¤° à¤¦à¥‹à¤¬à¤¾à¤°à¤¾ try à¤•à¤°à¥‡à¤‚à¥¤",
+    "कुछ गलत हुआ। Page refresh करें और दोबारा try करें।",
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// PARSE RAW ERROR â€” from wagmi/viem/Privy into ArcoinError
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
+// PARSE RAW ERROR — from wagmi/viem/Privy into ArcoinError
+// ─────────────────────────────────────────────────────────────
 export function parseError(
   raw: unknown,
   txHash?: `0x${string}`
@@ -84,10 +84,10 @@ export function parseError(
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// VALIDATE SEND â€” Run before any payment transaction
+// ─────────────────────────────────────────────────────────────
+// VALIDATE SEND — Run before any payment transaction
 // Returns null if valid, ArcoinError if not
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export function validateSend(
   amount: string,
   recipientAddress: string,

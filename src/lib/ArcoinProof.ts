@@ -1,5 +1,5 @@
 /**
- * ARCOIN â€” ArcoinProof.ts
+ * ARCOIN — ArcoinProof.ts
  * Generates tamper-evident, verifiable PDF receipts for every transaction.
  *
  * CONFIDENTIAL MODE COMPLIANT:
@@ -19,7 +19,7 @@ import { formatUSDC, formatUSDCProof } from "@/lib/usdc"
 import { EXPLORER, APP }               from "@/lib/constants"
 import type { ArcoinProof, ArcTransaction, Stream } from "@/types"
 
-// â”€â”€ PROOF ID GENERATOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PROOF ID GENERATOR ────────────────────────────────────────
 function generateProofId(): string {
   const bytes = crypto.getRandomValues(new Uint8Array(8))
   return "AP-" + Array.from(bytes)
@@ -28,7 +28,7 @@ function generateProofId(): string {
     .toUpperCase()
 }
 
-// â”€â”€ HMAC SIGNATURE (integrity, not security) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── HMAC SIGNATURE (integrity, not security) ──────────────────
 async function signProof(txHash: string, timestamp: number): Promise<string> {
   const key     = await crypto.subtle.importKey(
     "raw",
@@ -45,14 +45,14 @@ async function signProof(txHash: string, timestamp: number): Promise<string> {
     .toUpperCase()
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 // MAIN: Generate PDF from a transaction
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export async function generateTransactionProof(
   tx: ArcTransaction,
   recipientName?: string,   // ArcID if known
 ): Promise<void> {
-  // Dynamic import â€” jsPDF is large, load only when needed
+  // Dynamic import — jsPDF is large, load only when needed
   const { jsPDF }  = await import("jspdf")
   const QRCode     = await import("qrcode")
 
@@ -68,13 +68,13 @@ export async function generateTransactionProof(
     color: { dark: "#0A0E1A", light: "#FFFFFF" },
   })
 
-  // â”€â”€ PDF SETUP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── PDF SETUP ──────────────────────────────────────────────
   const doc    = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" })
   const W      = doc.internal.pageSize.getWidth()
   const margin = 20
   let   y      = margin
 
-  // â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── HEADER ─────────────────────────────────────────────────
   // Dark header bar
   doc.setFillColor(10, 14, 26)          // var(--bg) #0A0E1A
   doc.rect(0, 0, W, 40, "F")
@@ -104,7 +104,7 @@ export async function generateTransactionProof(
 
   y = 50
 
-  // â”€â”€ AMOUNT (HERO) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── AMOUNT (HERO) ───────────────────────────────────────────
   doc.setFontSize(32)
   doc.setFont("helvetica", "bold")
   doc.setTextColor(15, 22, 41)          // near-black on white
@@ -123,7 +123,7 @@ export async function generateTransactionProof(
   doc.line(margin, y, W - margin, y)
   y += 10
 
-  // â”€â”€ TRANSACTION DETAILS TABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── TRANSACTION DETAILS TABLE ───────────────────────────────
   const labelColor  = [100, 116, 139] as [number, number, number]
   const valueColor  = [15, 22, 41]    as [number, number, number]
   const rowH        = 9
@@ -199,7 +199,7 @@ export async function generateTransactionProof(
 
   y += 8
 
-  // â”€â”€ QR CODE + VERIFICATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── QR CODE + VERIFICATION ──────────────────────────────────
   doc.setDrawColor(30, 45, 69)
   doc.line(margin, y, W - margin, y)
   y += 10
@@ -219,10 +219,10 @@ export async function generateTransactionProof(
   doc.setTextColor(100, 116, 139)
   const instrX = margin + 40
   const instrs = [
-    "QR code scan à¤•à¤°à¥‡à¤‚ à¤¯à¤¾ à¤¨à¥€à¤šà¥‡ à¤•à¤¾ link à¤–à¥‹à¤²à¥‡à¤‚",
-    "Blockscout à¤ªà¤° transaction verify à¤•à¤°à¥‡à¤‚",
-    "Transaction hash + amount match à¤•à¤°à¥‡à¤‚",
-    "à¤¯à¤¹ proof on-chain data à¤¸à¥‡ generated à¤¹à¥ˆ",
+    "QR code scan करें या नीचे का link खोलें",
+    "Blockscout पर transaction verify करें",
+    "Transaction hash + amount match करें",
+    "यह proof on-chain data से generated है",
   ]
   instrs.forEach((line, i) => {
     doc.text(`${i + 1}. ${line}`, instrX, y + 7 + (i * 8))
@@ -236,7 +236,7 @@ export async function generateTransactionProof(
   doc.textWithLink(explorerUrl, margin, y, { url: explorerUrl })
   y += 10
 
-  // â”€â”€ INTEGRITY SIGNATURE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── INTEGRITY SIGNATURE ─────────────────────────────────────
   doc.setFillColor(240, 253, 250)       // very light green
   doc.setDrawColor(16, 185, 129)        // var(--green)
   doc.roundedRect(margin - 4, y, W - margin * 2 + 8, 14, 2, 2, "FD")
@@ -252,7 +252,7 @@ export async function generateTransactionProof(
   doc.text(`SIG: ${signature}  |  GENERATED: ${new Date(timestamp).toISOString()}  |  PROOF: ${proofId}`, margin, y + 11)
   y += 22
 
-  // â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── FOOTER ──────────────────────────────────────────────────
   const pageH = doc.internal.pageSize.getHeight()
   doc.setFillColor(10, 14, 26)
   doc.rect(0, pageH - 20, W, 20, "F")
@@ -261,22 +261,22 @@ export async function generateTransactionProof(
   doc.setFont("helvetica", "normal")
   doc.setTextColor(100, 116, 139)
   doc.text(
-    "à¤¯à¤¹ document Arcoin à¤¦à¥à¤µà¤¾à¤°à¤¾ client-side generate à¤¹à¥à¤† à¤¹à¥ˆà¥¤ On-chain data authoritative à¤¹à¥ˆà¥¤",
+    "यह document Arcoin द्वारा client-side generate हुआ है। On-chain data authoritative है।",
     W / 2, pageH - 12, { align: "center" }
   )
   doc.text(
-    `${APP.name} Â· ${APP.url} Â· Arc Testnet Â· Non-custodial`,
+    `${APP.name} · ${APP.url} · Arc Testnet · Non-custodial`,
     W / 2, pageH - 7, { align: "center" }
   )
 
-  // â”€â”€ SAVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── SAVE ────────────────────────────────────────────────────
   const filename = `arcoin-proof-${proofId}-${tx.hash.slice(0, 8)}.pdf`
   doc.save(filename)
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// STREAM PROOF â€” for Sablier streams
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
+// STREAM PROOF — for Sablier streams
+// ─────────────────────────────────────────────────────────────
 export async function generateStreamProof(stream: Stream): Promise<void> {
   const { jsPDF } = await import("jspdf")
   const QRCode    = await import("qrcode")
@@ -313,7 +313,7 @@ export async function generateStreamProof(stream: Stream): Promise<void> {
   y += 6
   doc.setFontSize(9); doc.setFont("helvetica", "normal")
   doc.setTextColor(100, 116, 139)
-  doc.text("Sablier V2 LockupLinear Â· Arc Testnet", W / 2, y, { align: "center" })
+  doc.text("Sablier V2 LockupLinear · Arc Testnet", W / 2, y, { align: "center" })
   y += 14
 
   doc.setDrawColor(30, 45, 69); doc.line(margin, y, W - margin, y); y += 10
@@ -368,15 +368,15 @@ export async function generateStreamProof(stream: Stream): Promise<void> {
   const pageH = doc.internal.pageSize.getHeight()
   doc.setFillColor(10, 14, 26); doc.rect(0, pageH - 20, W, 20, "F")
   doc.setFontSize(6.5); doc.setFont("helvetica", "normal"); doc.setTextColor(100, 116, 139)
-  doc.text(`${APP.name} Â· Stream Proof Â· ${APP.url}`, W / 2, pageH - 7, { align: "center" })
+  doc.text(`${APP.name} · Stream Proof · ${APP.url}`, W / 2, pageH - 7, { align: "center" })
 
   const filename = `arcoin-stream-proof-${proofId}-#${stream.id}.pdf`
   doc.save(filename)
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// CSV EXPORT â€” full audit history
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
+// CSV EXPORT — full audit history
+// ─────────────────────────────────────────────────────────────
 export function generateAuditCSV(transactions: ArcTransaction[]): void {
   const headers = [
     "Proof ID", "Hash", "Type", "From", "To",

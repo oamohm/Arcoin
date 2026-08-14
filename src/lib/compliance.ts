@@ -1,12 +1,12 @@
 /**
- * ARCOIN â€” compliance.ts
+ * ARCOIN — compliance.ts
  * OFAC / Sanctions screening layer.
  *
  * PHASE 1: Open-source SDN list (cached, client-side check)
  * PHASE 3: Drop-in replacement with Chainalysis or TRM Labs
  *
  * Upgrade path:
- *   Change the provider in screenAddress() â€” zero other code changes.
+ *   Change the provider in screenAddress() — zero other code changes.
  */
 
 import type { ScreeningResult } from "@/types"
@@ -25,16 +25,16 @@ const STATIC_BLOCKED: Set<string> = new Set([
 let sdnCacheTimestamp = 0
 const SDN_CACHE_TTL_MS = 1000 * 60 * 60 * 6 // 6 hours
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 // MAIN SCREENING FUNCTION
 // Phase 3 upgrade: swap out the provider block below
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export async function screenAddress(
   address: `0x${string}`
 ): Promise<ScreeningResult> {
   const normalized = address.toLowerCase()
 
-  // â”€â”€ PHASE 1: Static + SDN list check â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── PHASE 1: Static + SDN list check ──────────────────────
   if (STATIC_BLOCKED.has(normalized)) {
     return {
       address,
@@ -44,7 +44,7 @@ export async function screenAddress(
     }
   }
 
-  // â”€â”€ PHASE 3 UPGRADE HOOK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── PHASE 3 UPGRADE HOOK ──────────────────────────────────
   // Uncomment one of these blocks to upgrade:
   //
   // if (process.env.NEXT_PUBLIC_CHAINALYSIS_KEY) {
@@ -54,7 +54,7 @@ export async function screenAddress(
   // if (process.env.NEXT_PUBLIC_TRM_KEY) {
   //   return await screenWithTRM(address)
   // }
-  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ──────────────────────────────────────────────────────────
 
   return {
     address,
@@ -63,9 +63,9 @@ export async function screenAddress(
   }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// PHASE 3 STUBS â€” ready to implement
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
+// PHASE 3 STUBS — ready to implement
+// ─────────────────────────────────────────────────────────────
 
 // async function screenWithChainalysis(address: `0x${string}`): Promise<ScreeningResult> {
 //   const res = await fetch(
@@ -99,10 +99,10 @@ export async function screenAddress(
 //   }
 // }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-// PRE-FLIGHT CHECK â€” Run before any outbound transaction
+// ─────────────────────────────────────────────────────────────
+// PRE-FLIGHT CHECK — Run before any outbound transaction
 // Usage: await requireCleanAddress(recipient)
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export async function requireCleanAddress(
   address: `0x${string}`
 ): Promise<void> {

@@ -1,15 +1,15 @@
 "use client"
 /**
- * ARCOIN â€” SwapScreen.tsx
+ * ARCOIN — SwapScreen.tsx
  * APEXISWAP swap interface. Fully wired to useSwap hook.
  *
  * Flow:
- *   Select tokens â†’ Enter amount â†’ getQuote (auto) â†’
- *   Review (slippage, impact, deadline) â†’ executeSwap â†’ TxStatusBar
+ *   Select tokens → Enter amount → getQuote (auto) →
+ *   Review (slippage, impact, deadline) → executeSwap → TxStatusBar
  *
  * Routing is automatic:
- *   USDC â†” EURC  â†’  StableFX
- *   Others        â†’  APEXISWAP Router
+ *   USDC ↔ EURC  →  StableFX
+ *   Others        →  APEXISWAP Router
  */
 
 import { useState, useEffect, useCallback } from "react"
@@ -21,7 +21,7 @@ import { TOKENS, APEXISWAP, EXPLORER } from "@/lib/constants"
 import { formatUSDC, isValidUSDCAmount } from "@/lib/usdc"
 import type { SwapQuote } from "@/types"
 
-// â”€â”€ TOKEN REGISTRY (extend as new Arc tokens launch) â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── TOKEN REGISTRY (extend as new Arc tokens launch) ─────────
 const TOKEN_LIST = [
   {
     address:  TOKENS.USDC.address,
@@ -29,7 +29,7 @@ const TOKEN_LIST = [
     name:     "USD Coin",
     decimals: 6,
     color:    "#2775CA",
-    icon:     "â—Ž",
+    icon:     "◎",
   },
   {
     address:  TOKENS.EURC.address,
@@ -37,7 +37,7 @@ const TOKEN_LIST = [
     name:     "Euro Coin",
     decimals: 6,
     color:    "#0052B4",
-    icon:     "â‚¬",
+    icon:     "€",
   },
   {
     address:  APEXISWAP.WUSDC,
@@ -45,20 +45,20 @@ const TOKEN_LIST = [
     name:     "Wrapped USDC",
     decimals: 6,
     color:    "#22D3EE",
-    icon:     "â—ˆ",
+    icon:     "◈",
   },
 ] as const
 
 type TokenEntry = typeof TOKEN_LIST[number]
 
-// â”€â”€ SLIPPAGE OPTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── SLIPPAGE OPTIONS ─────────────────────────────────────────
 const SLIPPAGE_OPTIONS = [
   { label: "0.1%", bps: 10  },
   { label: "0.5%", bps: 50  },
   { label: "1.0%", bps: 100 },
 ] as const
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) {
   const { getQuote, executeSwap, txState, quoteState, reset } = useSwap()
   const balance = useArcBalance()
@@ -76,7 +76,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
   const { quote, isLoading: quoteLoading, expiresIn } = quoteState
   const amountValid = isValidUSDCAmount(amountIn)
 
-  // â”€â”€ AUTO-QUOTE on amount change (300ms debounce) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── AUTO-QUOTE on amount change (300ms debounce) ─────────────
   useEffect(() => {
     if (quoteTimer) clearTimeout(quoteTimer)
     if (!amountIn || !amountValid) return
@@ -90,7 +90,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amountIn, tokenIn.address, tokenOut.address])
 
-  // â”€â”€ SWAP DIRECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── SWAP DIRECTION ────────────────────────────────────────────
   const flipTokens = useCallback(() => {
     setTokenIn(tokenOut)
     setTokenOut(tokenIn)
@@ -98,7 +98,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
     reset()
   }, [tokenIn, tokenOut, reset])
 
-  // â”€â”€ EXECUTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── EXECUTE ───────────────────────────────────────────────────
   const handleSwap = useCallback(async () => {
     if (!quote) return
     await executeSwap(quote, slippageBps)
@@ -107,7 +107,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
     }
   }, [quote, executeSwap, slippageBps, txState, toast])
 
-  // â”€â”€ PATH LABEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── PATH LABEL ────────────────────────────────────────────────
   const pathLabel = quote?.path === "stablefx"
     ? "Circle StableFX"
     : quote?.path === "cctp_bridge"
@@ -119,16 +119,16 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
 
-      {/* â”€â”€ TX STATUS OVERLAY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── TX STATUS OVERLAY ─────────────────────────────────── */}
       {txState.status !== "idle" && (
         <TxStatusBar
           txState={txState}
-          label={`Swapping ${amountIn} ${tokenIn.symbol} â†’ ${tokenOut.symbol}`}
+          label={`Swapping ${amountIn} ${tokenIn.symbol} → ${tokenOut.symbol}`}
           onClose={reset}
         />
       )}
 
-      {/* â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── HEADER ────────────────────────────────────────────── */}
       <div style={{
         position:      "sticky", top: 0, zIndex: 20,
         background:    "var(--bg)", borderBottom: "1px solid var(--border)",
@@ -140,7 +140,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
           <button onClick={() => onNavigate("dashboard")} style={{
             background: "none", border: "none", color: "var(--text-dim)",
             fontSize: "20px", cursor: "pointer",
-          }}>â†</button>
+          }}>←</button>
           <span style={{
             fontFamily: "var(--font-mono)", fontSize: "13px",
             letterSpacing: "0.1em", color: "var(--text)", textTransform: "uppercase", fontWeight: "600",
@@ -161,11 +161,11 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
             fontFamily:    "var(--font-mono)",
           }}
         >
-          âš™ {(slippageBps / 100).toFixed(1)}%
+          ⚙ {(slippageBps / 100).toFixed(1)}%
         </button>
       </div>
 
-      {/* â”€â”€ SLIPPAGE SETTINGS PANEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* ── SLIPPAGE SETTINGS PANEL ───────────────────────────── */}
       {showSettings && (
         <div style={{
           background:   "var(--surface)",
@@ -204,7 +204,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
           </div>
           {slippageBps >= 100 && (
             <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--amber)", marginTop: "8px" }}>
-              âš  High slippage â€” front-running risk à¤¬à¤¢à¤¼ à¤œà¤¾à¤¤à¤¾ à¤¹à¥ˆà¥¤
+              ⚠  High slippage — front-running risk बढ़ जाता है।
             </p>
           )}
         </div>
@@ -212,7 +212,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
 
       <div style={{ padding: "20px", flex: 1 }}>
 
-        {/* â”€â”€ FROM TOKEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── FROM TOKEN ────────────────────────────────────────── */}
         <div style={{
           background:    "var(--surface)",
           border:        "1px solid var(--border)",
@@ -258,7 +258,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
                              fontWeight: "700", color: "var(--text)" }}>
                 {tokenIn.symbol}
               </span>
-              <span style={{ fontSize: "10px", color: "var(--text-dim)" }}>â–¼</span>
+              <span style={{ fontSize: "10px", color: "var(--text-dim)" }}>▼</span>
             </button>
 
             {/* Amount input */}
@@ -312,7 +312,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
           </div>
         </div>
 
-        {/* â”€â”€ FLIP BUTTON â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── FLIP BUTTON ───────────────────────────────────────── */}
         <div style={{ display: "flex", justifyContent: "center", margin: "4px 0", position: "relative", zIndex: 1 }}>
           <button
             onClick={flipTokens}
@@ -341,11 +341,11 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
               e.currentTarget.style.transform   = "rotate(0deg)"
             }}
           >
-            â‡…
+            ⇅
           </button>
         </div>
 
-        {/* â”€â”€ TO TOKEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── TO TOKEN ──────────────────────────────────────────── */}
         <div style={{
           background:   "var(--surface)",
           border:       "1px solid var(--border)",
@@ -388,7 +388,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
                              fontWeight: "700", color: "var(--text)" }}>
                 {tokenOut.symbol}
               </span>
-              <span style={{ fontSize: "10px", color: "var(--text-dim)" }}>â–¼</span>
+              <span style={{ fontSize: "10px", color: "var(--text-dim)" }}>▼</span>
             </button>
 
             {/* Quote output */}
@@ -405,7 +405,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
                 </span>
               ) : (
                 <span style={{ fontFamily: "var(--font-mono)", fontSize: "20px",
-                               color: "var(--text-muted)" }}>â€”</span>
+                               color: "var(--text-muted)" }}>—</span>
               )}
             </div>
           </div>
@@ -419,7 +419,7 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
           )}
         </div>
 
-        {/* â”€â”€ QUOTE DETAILS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── QUOTE DETAILS ─────────────────────────────────────── */}
         {quote && (
           <div style={{
             background:   "var(--surface)",
@@ -485,13 +485,13 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
                 color: expiresIn < 10 ? "var(--red)" : "var(--text-dim)",
               }}>
                 Quote expires in {expiresIn}s
-                {expiresIn < 10 && " âš "}
+                {expiresIn < 10 && " ⚠ "}
               </span>
             </div>
           </div>
         )}
 
-        {/* â”€â”€ HIGH IMPACT WARNING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── HIGH IMPACT WARNING ───────────────────────────────── */}
         {quote && quote.priceImpact > 3 && (
           <div style={{
             background:   "#F59E0B18",
@@ -502,15 +502,15 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
             display:      "flex",
             gap:          "10px",
           }}>
-            <span>âš </span>
+            <span>⚠ </span>
             <p style={{ fontSize: "12px", color: "var(--amber)", lineHeight: 1.5 }}>
-              High price impact ({quote.priceImpact.toFixed(1)}%)à¥¤
-              Amount reduce à¤•à¤°à¥‡à¤‚ à¤¯à¤¾ slippage à¤¬à¤¢à¤¼à¤¾à¤à¤‚à¥¤
+              High price impact ({quote.priceImpact.toFixed(1)}%)।
+              Amount reduce करें या slippage बढ़ाएं।
             </p>
           </div>
         )}
 
-        {/* â”€â”€ SWAP BUTTON â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── SWAP BUTTON ───────────────────────────────────────── */}
         <button
           onClick={handleSwap}
           disabled={!quote || !amountValid || quoteLoading || expiresIn === 0}
@@ -531,15 +531,15 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
             letterSpacing: "0.01em",
           }}
         >
-          {!amountIn       ? "Amount à¤¡à¤¾à¤²à¥‡à¤‚"
+          {!amountIn       ? "Amount डालें"
            : !amountValid  ? "Invalid Amount"
-           : quoteLoading  ? "Quote à¤²à¥‡ à¤°à¤¹à¥‡ à¤¹à¥ˆà¤‚..."
-           : !quote        ? "Quote à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤²à¥€"
-           : expiresIn === 0 ? "Quote Expired â€” Refresh à¤•à¤°à¥‡à¤‚"
-           : `Swap ${tokenIn.symbol} â†’ ${tokenOut.symbol}`}
+           : quoteLoading  ? "Quote ले रहे हैं..."
+           : !quote        ? "Quote नहीं मिली"
+           : expiresIn === 0 ? "Quote Expired — Refresh करें"
+           : `Swap ${tokenIn.symbol} → ${tokenOut.symbol}`}
         </button>
 
-        {/* â”€â”€ APEXISWAP ATTRIBUTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* ── APEXISWAP ATTRIBUTION ─────────────────────────────── */}
         <p style={{
           textAlign:  "center",
           marginTop:  "14px",
@@ -554,16 +554,16 @@ export function SwapScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
             rel="noopener noreferrer"
             style={{ color: "var(--cyan)", textDecoration: "none" }}
           >
-            APEXISWAP â†—
+            APEXISWAP ↗
           </a>
-          {" "}Â· Arc Testnet Â· Non-custodial
+          {" "}· Arc Testnet · Non-custodial
         </p>
       </div>
     </div>
   )
 }
 
-// â”€â”€ TOKEN DROPDOWN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── TOKEN DROPDOWN ────────────────────────────────────────────
 function TokenDropdown({
   tokens,
   exclude,

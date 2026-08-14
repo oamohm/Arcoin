@@ -1,8 +1,8 @@
 "use client"
 /**
- * ARCOIN â€” TxStatusBar.tsx
+ * ARCOIN — TxStatusBar.tsx
  * Full-screen overlay showing real-time transaction progress.
- * Used by Send, Swap, Stream creation â€” any multi-step tx.
+ * Used by Send, Swap, Stream creation — any multi-step tx.
  */
 
 import { EXPLORER } from "@/lib/constants"
@@ -25,12 +25,12 @@ const STATUS_INDEX: Record<string, number> = {
 }
 
 const STATUS_MESSAGES: Record<string, string> = {
-  simulating:   "Transaction verify à¤¹à¥‹ à¤°à¤¹à¥€ à¤¹à¥ˆ...",
-  signing:      "Wallet à¤¸à¥‡ approve à¤•à¤°à¥‡à¤‚...",
-  broadcasting: "Arc Network à¤ªà¤° à¤­à¥‡à¤œà¤¾ à¤œà¤¾ à¤°à¤¹à¤¾ à¤¹à¥ˆ...",
-  confirming:   "Block confirmation à¤•à¤¾ à¤‡à¤‚à¤¤à¤œà¤¼à¤¾à¤°...",
+  simulating:   "Transaction verify हो रही है...",
+  signing:      "Wallet से approve करें...",
+  broadcasting: "Arc Network पर भेजा जा रहा है...",
+  confirming:   "Block confirmation का इंतज़ार...",
   success:      "Transaction confirmed!",
-  failed:       "Transaction fail à¤¹à¥‹ à¤—à¤ˆà¥¤",
+  failed:       "Transaction fail हो गई।",
 }
 
 interface Props {
@@ -84,7 +84,7 @@ export function TxStatusBar({ txState, onClose, label }: Props) {
           fontSize:       "28px",
           margin:         "0 auto 20px",
         }}>
-          {isFailed ? "âœ•" : isSuccess ? "âœ“" : "â—ˆ"}
+          {isFailed ? "✕" : isSuccess ? "✓" : "◈"}
         </div>
 
         {/* Label */}
@@ -152,7 +152,7 @@ export function TxStatusBar({ txState, onClose, label }: Props) {
                       transition: "all 0.3s",
                       ...(active ? { animation: "pulse-dot 1.5s ease-in-out infinite" } : {}),
                     }}>
-                      {done ? "âœ“" : ""}
+                      {done ? "✓" : ""}
                     </div>
                     {i < STEPS.length - 1 && (
                       <div style={{
@@ -199,7 +199,7 @@ export function TxStatusBar({ txState, onClose, label }: Props) {
               rel="noopener noreferrer"
               style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--cyan)", textDecoration: "none" }}
             >
-              Blockscout â†—
+              Blockscout ↗
             </a>
           </div>
         )}
@@ -236,7 +236,7 @@ export function TxStatusBar({ txState, onClose, label }: Props) {
               fontFamily:    "var(--font-sans)",
             }}
           >
-            {isSuccess ? "Done âœ“" : "Try Again"}
+            {isSuccess ? "Done ✓" : "Try Again"}
           </button>
         )}
       </div>

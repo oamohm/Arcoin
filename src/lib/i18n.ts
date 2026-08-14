@@ -1,11 +1,11 @@
 /**
- * ARCOIN â€” i18n.ts
- * Lightweight i18n â€” no external library needed.
+ * ARCOIN — i18n.ts
+ * Lightweight i18n — no external library needed.
  *
  * Uses browser localStorage to persist language choice.
  * Falls back to English for any missing key.
  *
- * Scope: Dashboard Â· ConnectScreen Â· SendScreen only.
+ * Scope: Dashboard · ConnectScreen · SendScreen only.
  * Other screens remain in English (by design).
  */
 
@@ -19,7 +19,7 @@ export const DEFAULT_LOCALE: Locale = "en"
 
 const MESSAGES: Record<Locale, Record<string, string>> = { en, hi }
 
-// â”€â”€ Read locale from localStorage (client-side only) â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Read locale from localStorage (client-side only) ─────────
 export function getStoredLocale(): Locale {
   if (typeof window === "undefined") return DEFAULT_LOCALE
   const stored = localStorage.getItem("arcoin_locale") as Locale | null
@@ -31,7 +31,7 @@ export function setStoredLocale(locale: Locale): void {
   localStorage.setItem("arcoin_locale", locale)
 }
 
-// â”€â”€ Core translation function â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Core translation function ─────────────────────────────────
 export function t(
   key:    string,
   locale: Locale = DEFAULT_LOCALE,
@@ -39,7 +39,7 @@ export function t(
 ): string {
   const msg = MESSAGES[locale]?.[key] ?? MESSAGES.en[key] ?? key
 
-  // Simple variable substitution: {name} â†’ value
+  // Simple variable substitution: {name} → value
   if (!values) return msg
   return Object.entries(values).reduce(
     (acc, [k, v]) => acc.replace(new RegExp(`\\{${k}\\}`, "g"), String(v)),
@@ -47,7 +47,7 @@ export function t(
   )
 }
 
-// â”€â”€ React hook â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── React hook ────────────────────────────────────────────────
 import { useState, useCallback, useEffect } from "react"
 
 export function useI18n() {

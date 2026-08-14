@@ -3,61 +3,58 @@ import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"
 import { Providers } from "./providers"
 import "./globals.css"
 
-// FONTS
+// ── FONTS ─────────────────────────────────────────────────
 const inter = Inter({
-  subsets: ["latin"],
+  subsets:  ["latin"],
   variable: "--font-inter",
-  display: "swap",
-  preload: false,
+  display:  "swap",
 })
 
 const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
+  subsets:  ["latin"],
   variable: "--font-display",
-  display: "swap",
-  preload: false,
+  display:  "swap",
 })
 
 const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
+  subsets:  ["latin"],
   variable: "--font-mono",
-  display: "swap",
-  preload: false,
+  display:  "swap",
 })
 
-// METADATA
+// ── METADATA ─────────────────────────────────────────────
 export const metadata: Metadata = {
-  title: "Arcoin — DeFi Operating System",
-  description: "Arc Network native payment, streaming, swap hub. Send, Stream, Swap.",
-  manifest: "/manifest.json",
-  keywords: ["DeFi", "Arc Network", "USDC", "Payment Streaming", "Web3"],
-  authors: [{ name: "Arcoin" }],
-  robots: "noindex",
+  title:       "Arcoin — DeFi Operating System",
+  description: "Arc Network का native payment, streaming, और swap hub। Send · Stream · Swap.",
+  manifest:    "/manifest.json",
+  keywords:    ["DeFi", "Arc Network", "USDC", "Payment Streaming", "Web3"],
+  authors:     [{ name: "Arcoin" }],
+  robots:      "noindex",   // testnet — don't index
   icons: {
-    icon: [
-      { url: "/icons/icon-32.png", sizes: "32x32" },
+    icon:   [
+      { url: "/icons/icon-32.png",  sizes: "32x32"  },
       { url: "/icons/icon-192.png", sizes: "192x192" },
     ],
     apple: "/icons/apple-touch-icon.png",
   },
   openGraph: {
-    title: "Arcoin — DeFi Operating System",
-    description: "Arc Network native payment hub",
-    type: "website",
-    siteName: "Arcoin",
+    title:       "Arcoin — DeFi Operating System",
+    description: "Arc Network का native payment hub",
+    type:        "website",
+    siteName:    "Arcoin",
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0A0E1A",
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  viewportFit: "cover",
+  themeColor:          "#0A0E1A",
+  width:               "device-width",
+  initialScale:        1,
+  maximumScale:        1,   // prevent zoom on input focus (mobile UX)
+  userScalable:        false,
+  viewportFit:         "cover",  // safe area on notched phones
 }
 
-// ROOT LAYOUT
+// ── ROOT LAYOUT ──────────────────────────────────────────
 export default function RootLayout({
   children,
 }: {
@@ -69,14 +66,18 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
     >
       <head>
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Arcoin" />
+        {/* PWA iOS support */}
+        <meta name="apple-mobile-web-app-capable"            content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style"   content="black-translucent" />
+        <meta name="apple-mobile-web-app-title"              content="Arcoin" />
+        {/* Preconnect to Arc RPC for faster first tx */}
         <link rel="preconnect" href="https://rpc.testnet.arc.network" />
         <link rel="preconnect" href="https://atlas.blockscout.com" />
       </head>
       <body className="bg-arc-bg antialiased">
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   )

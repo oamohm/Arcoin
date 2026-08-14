@@ -1,14 +1,14 @@
 "use client"
 /**
- * ARCOIN â€” useSablier.ts
+ * ARCOIN — useSablier.ts
  * Sablier V2 LockupLinear stream operations.
  *
  * Operations:
- *   createStream    â€” approve USDC + create stream
- *   withdrawMax     â€” withdraw all available funds
- *   cancelStream    â€” cancel (sender only)
- *   getStreamData   â€” read single stream state
- *   getUserStreams   â€” read all streams for address (Blockscout API)
+ *   createStream    — approve USDC + create stream
+ *   withdrawMax     — withdraw all available funds
+ *   cancelStream    — cancel (sender only)
+ *   getStreamData   — read single stream state
+ *   getUserStreams   — read all streams for address (Blockscout API)
  *
  * DECIMAL RULE: All amounts use parseUSDC (6 decimals). Always.
  */
@@ -26,7 +26,7 @@ import { requireCleanAddress }         from "@/lib/compliance"
 import type { Stream, TxState,
               StreamRecipient }        from "@/types"
 
-// â”€â”€ SABLIER V2 ABI (LockupLinear) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── SABLIER V2 ABI (LockupLinear) ───────────────────────────
 const LOCKUP_LINEAR_ABI = [
   // Create stream with durations
   {
@@ -125,9 +125,9 @@ const APPROVE_ABI = [
   },
 ] as const
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 // TYPES
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 interface CreateStreamParams {
   recipient:     string
   totalAmount:   string      // human-readable, e.g. "500"
@@ -146,7 +146,7 @@ interface UseSablier {
   reset:         () => void
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export function useSablier(): UseSablier {
   const { user }           = usePrivy()
   const publicClient       = usePublicClient()
@@ -157,7 +157,7 @@ export function useSablier(): UseSablier {
 
   const walletAddress = user?.wallet?.address as `0x${string}` | undefined
 
-  // â”€â”€ CREATE SINGLE STREAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── CREATE SINGLE STREAM ──────────────────────────────────
   const createStream = useCallback(async (
     params: CreateStreamParams
   ): Promise<bigint | null> => {
@@ -165,7 +165,7 @@ export function useSablier(): UseSablier {
     if (!SABLIER.LockupLinear) {
       setTxState({ status: "failed",
         error: { code: "contract_not_deployed",
-                 message: "Sablier à¤…à¤­à¥€ Arc à¤ªà¤° deploy à¤¨à¤¹à¥€à¤‚ à¤¹à¥à¤†à¥¤ Deploy à¤•à¤°à¥‡à¤‚ à¤ªà¤¹à¤²à¥‡à¥¤" } })
+                 message: "Sablier अभी Arc पर deploy नहीं हुआ। Deploy करें पहले।" } })
       return null
     }
 
@@ -267,11 +267,11 @@ export function useSablier(): UseSablier {
     }
   }, [walletAddress, publicClient, writeContractAsync])
 
-  // â”€â”€ BULK CREATE (StreamSplit) â€” Multicall3 batch â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── BULK CREATE (StreamSplit) — Multicall3 batch ──────────
   //
   // ARCHITECTURE:
-  //   Old: N recipients â†’ N separate txns â†’ N gas payments â†’ N wallet popups
-  //   New: N recipients â†’ 1 approve + 1 Multicall3 â†’ 1 gas payment â†’ 1 popup
+  //   Old: N recipients → N separate txns → N gas payments → N wallet popups
+  //   New: N recipients → 1 approve + 1 Multicall3 → 1 gas payment → 1 popup
   //
   // Multicall3From (0x522f...) is used over standard Multicall3 because
   // it preserves msg.sender, which Sablier requires for stream ownership.
@@ -280,7 +280,7 @@ export function useSablier(): UseSablier {
   // For >50: auto-splits into chunks, each chunk = 1 transaction.
   //
   // FAILURE HANDLING:
-  //   allowFailure: true â€” one recipient's bad address won't revert the whole batch.
+  //   allowFailure: true — one recipient's bad address won't revert the whole batch.
   //   Failed calls are logged; successful ones are confirmed on-chain.
 
   const createBulk = useCallback(async (
@@ -290,12 +290,12 @@ export function useSablier(): UseSablier {
     if (!SABLIER.LockupLinear) {
       setTxState({ status: "failed", error: {
         code:    "contract_not_deployed",
-        message: "Sablier contract deploy à¤¨à¤¹à¥€à¤‚ à¤¹à¥à¤†à¥¤",
+        message: "Sablier contract deploy नहीं हुआ।",
       }})
       return
     }
 
-    // â”€â”€ MULTICALL3 ABI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── MULTICALL3 ABI ─────────────────────────────────────
     const MULTICALL3_ABI = [
       {
         name: "aggregate3",
@@ -376,7 +376,7 @@ export function useSablier(): UseSablier {
         : ""
 
       try {
-        // â”€â”€ Step 1: Calculate total USDC needed for this chunk â”€â”€
+        // ── Step 1: Calculate total USDC needed for this chunk ──
         const { encodeAbiParameters, encodeFunctionData, parseAbiParameters } = await import("viem")
 
         const totalRaw = chunk.reduce(
@@ -384,7 +384,7 @@ export function useSablier(): UseSablier {
           0n
         )
 
-        // â”€â”€ Step 2: Single USDC approve for entire chunk â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Step 2: Single USDC approve for entire chunk ────────
         setTxState({ status: "signing" })
         const approveTx = await writeContractAsync({
           address:      TOKENS.USDC.address,
@@ -397,7 +397,7 @@ export function useSablier(): UseSablier {
           hash: approveTx, confirmations: 1, pollingInterval: 2000
         })
 
-        // â”€â”€ Step 3: Build Multicall3 calldata for each recipient
+        // ── Step 3: Build Multicall3 calldata for each recipient
         const calls = chunk.map(r => {
           const callData = encodeFunctionData({
             abi:          SABLIER_CREATE_ABI,
@@ -422,12 +422,12 @@ export function useSablier(): UseSablier {
 
           return {
             target:       SABLIER.LockupLinear as `0x${string}`,
-            allowFailure: true,   // â† one bad address won't fail all
+            allowFailure: true,   // ← one bad address won't fail all
             callData,
           }
         })
 
-        // â”€â”€ Step 4: Single Multicall3 transaction â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Step 4: Single Multicall3 transaction ───────────────
         setTxState({ status: "signing" })
         const batchTx = await writeContractAsync({
           address:      MULTICALL_ADDR,
@@ -441,7 +441,7 @@ export function useSablier(): UseSablier {
           hash: batchTx, confirmations: 1, pollingInterval: 2000, timeout: 90_000
         })
 
-        // â”€â”€ Step 5: Count successes from returnData â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── Step 5: Count successes from returnData ─────────────
         // Each call in aggregate3 returns { success, returnData }
         // We can read success flags from the logs/receipt
         // Simple heuristic: if receipt.status = success, batch went through
@@ -469,12 +469,12 @@ export function useSablier(): UseSablier {
     } else {
       setTxState({ status: "failed", error: {
         code:    "transaction_reverted",
-        message: `à¤¸à¤­à¥€ streams fail à¤¹à¥à¤ˆà¤‚à¥¤ Addresses à¤”à¤° amounts verify à¤•à¤°à¥‡à¤‚à¥¤`,
+        message: `सभी streams fail हुईं। Addresses और amounts verify करें।`,
       }})
     }
   }, [walletAddress, publicClient, writeContractAsync])
 
-  // â”€â”€ WITHDRAW MAX â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── WITHDRAW MAX ──────────────────────────────────────────
   const withdrawMax = useCallback(async (streamId: bigint) => {
     if (!walletAddress || !publicClient) return
 
@@ -498,7 +498,7 @@ export function useSablier(): UseSablier {
     }
   }, [walletAddress, publicClient, writeContractAsync])
 
-  // â”€â”€ CANCEL STREAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── CANCEL STREAM ─────────────────────────────────────────
   const cancelStream = useCallback(async (streamId: bigint) => {
     if (!walletAddress || !publicClient) return
 
@@ -522,7 +522,7 @@ export function useSablier(): UseSablier {
     }
   }, [walletAddress, publicClient, writeContractAsync])
 
-  // â”€â”€ READ SINGLE STREAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── READ SINGLE STREAM ────────────────────────────────────
   const getStreamData = useCallback(async (
     streamId: bigint
   ): Promise<Stream | null> => {

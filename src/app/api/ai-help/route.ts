@@ -1,5 +1,5 @@
 /**
- * ARCOIN â€” /api/ai-help/route.ts
+ * ARCOIN — /api/ai-help/route.ts
  * Server-side Claude API proxy. ANTHROPIC_API_KEY stays server-only.
  * Rate limited to prevent abuse.
  */
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   const ip = req.headers.get("x-forwarded-for") ?? "unknown"
   if (!checkRateLimit(ip)) {
     return NextResponse.json(
-      { error: "Rate limit exceeded. 1 hour à¤¬à¤¾à¤¦ try à¤•à¤°à¥‡à¤‚à¥¤" },
+      { error: "Rate limit exceeded. 1 hour बाद try करें।" },
       { status: 429 }
     )
   }
@@ -62,20 +62,20 @@ export async function POST(req: NextRequest) {
       const err = await response.json().catch(() => ({}))
       console.error("Claude API error:", err)
       return NextResponse.json(
-        { content: "AI temporarily unavailableà¥¤ Docs à¤¦à¥‡à¤–à¥‡à¤‚: docs.arc.io" },
+        { content: "AI temporarily unavailable। Docs देखें: docs.arc.io" },
         { status: 200 }   // Return 200 so UI doesn't break
       )
     }
 
     const data = await response.json()
-    const content = data.content?.[0]?.text ?? "Response à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤²à¥€à¥¤"
+    const content = data.content?.[0]?.text ?? "Response नहीं मिली।"
 
     return NextResponse.json({ content })
 
   } catch (err) {
     console.error("AI help route error:", err)
     return NextResponse.json(
-      { content: "Something went wrongà¥¤ Please retryà¥¤" },
+      { content: "Something went wrong। Please retry।" },
       { status: 200 }
     )
   }

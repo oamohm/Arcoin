@@ -1,12 +1,12 @@
 "use client"
 /**
- * ARCOIN â€” EscrowScreen.tsx
+ * ARCOIN — EscrowScreen.tsx
  * Non-custodial P2P/B2B escrow interface.
  *
  * Flows:
- *   Create â†’ lock funds â†’ recipient delivers â†’ sender releases
- *   Dispute â†’ arbiter resolves â†’ split or full award
- *   Timeout â†’ sender refunds
+ *   Create → lock funds → recipient delivers → sender releases
+ *   Dispute → arbiter resolves → split or full award
+ *   Timeout → sender refunds
  */
 
 import { useState, useEffect }  from "react"
@@ -20,16 +20,16 @@ import type { EscrowData }       from "@/hooks/useEscrow"
 
 type EscrowView = "list" | "create"
 
-// â”€â”€ STATUS COLORS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── STATUS COLORS ─────────────────────────────────────────────
 const STATUS_CONFIG = {
-  Active:   { color: "var(--cyan)",  bg: "var(--cyan-glow)",    icon: "âŸ³" },
-  Released: { color: "var(--green)", bg: "#10B98118",            icon: "âœ“" },
-  Refunded: { color: "var(--text-dim)", bg: "var(--border)",    icon: "â†©" },
-  Disputed: { color: "var(--amber)", bg: "#F59E0B18",            icon: "âš " },
-  Resolved: { color: "var(--green)", bg: "#10B98118",            icon: "âš–" },
+  Active:   { color: "var(--cyan)",  bg: "var(--cyan-glow)",    icon: "⟳" },
+  Released: { color: "var(--green)", bg: "#10B98118",            icon: "✓" },
+  Refunded: { color: "var(--text-dim)", bg: "var(--border)",    icon: "↩" },
+  Disputed: { color: "var(--amber)", bg: "#F59E0B18",            icon: "⚠ " },
+  Resolved: { color: "var(--green)", bg: "#10B98118",            icon: "⚖" },
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export function EscrowScreen({ onNavigate }: { onNavigate: (s: string) => void }) {
   const escrow  = useEscrow()
   const toast   = useToast()
@@ -54,8 +54,8 @@ export function EscrowScreen({ onNavigate }: { onNavigate: (s: string) => void }
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           {view !== "list"
-            ? <button onClick={() => setView("list")} style={{ background: "none", border: "none", color: "var(--text-dim)", fontSize: "20px", cursor: "pointer" }}>â†</button>
-            : <button onClick={() => onNavigate("dashboard")} style={{ background: "none", border: "none", color: "var(--text-dim)", fontSize: "20px", cursor: "pointer" }}>â†</button>
+            ? <button onClick={() => setView("list")} style={{ background: "none", border: "none", color: "var(--text-dim)", fontSize: "20px", cursor: "pointer" }}>←</button>
+            : <button onClick={() => onNavigate("dashboard")} style={{ background: "none", border: "none", color: "var(--text-dim)", fontSize: "20px", cursor: "pointer" }}>←</button>
           }
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "13px", letterSpacing: "0.1em", color: "var(--text)", textTransform: "uppercase", fontWeight: "600" }}>
             {view === "list" ? "Escrow" : "New Escrow"}
@@ -75,8 +75,8 @@ export function EscrowScreen({ onNavigate }: { onNavigate: (s: string) => void }
       {!escrow.isContractDeployed && (
         <div style={{ margin: "16px 16px 0", background: "#F59E0B18", border: "1px solid #F59E0B44", borderRadius: "var(--radius)", padding: "12px 14px" }}>
           <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--amber)", lineHeight: 1.5 }}>
-            âš  Escrow contract deploy à¤¨à¤¹à¥€à¤‚ à¤¹à¥à¤†à¥¤<br />
-            <code>npx hardhat run contracts/scripts/deploy-all.ts</code> à¤šà¤²à¤¾à¤à¤‚à¥¤
+            ⚠  Escrow contract deploy नहीं हुआ।<br />
+            <code>npx hardhat run contracts/scripts/deploy-all.ts</code> चलाएं।
           </p>
         </div>
       )}
@@ -87,7 +87,7 @@ export function EscrowScreen({ onNavigate }: { onNavigate: (s: string) => void }
   )
 }
 
-// â”€â”€ ESCROW LIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── ESCROW LIST ───────────────────────────────────────────────
 function EscrowList({
   escrows, isLoading,
   onRelease, onRefund, onDispute, toast,
@@ -110,9 +110,9 @@ function EscrowList({
   if (escrows.length === 0) {
     return (
       <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 24px", textAlign: "center" }}>
-        <div style={{ fontSize: "40px", marginBottom: "16px" }}>âš–</div>
+        <div style={{ fontSize: "40px", marginBottom: "16px" }}>⚖</div>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "13px", color: "var(--text-dim)" }}>
-          à¤•à¥‹à¤ˆ active escrow à¤¨à¤¹à¥€à¤‚à¥¤<br />+ New à¤¸à¥‡ P2P deal à¤¶à¥à¤°à¥‚ à¤•à¤°à¥‡à¤‚à¥¤
+          कोई active escrow नहीं।<br />+ New से P2P deal शुरू करें।
         </p>
       </div>
     )
@@ -147,7 +147,7 @@ function EscrowList({
                   </span>
                 </div>
                 <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-dim)" }}>
-                  â†’ {e.recipient.slice(0,6)}...{e.recipient.slice(-4)}
+                  → {e.recipient.slice(0,6)}...{e.recipient.slice(-4)}
                 </p>
               </div>
               <div style={{ textAlign: "right" }}>
@@ -176,7 +176,7 @@ function EscrowList({
                   onClick={() => onRelease(e.id)}
                   style={{ flex: 1, minWidth: "80px", background: "var(--cyan-glow)", border: "1px solid var(--cyan-dim)", borderRadius: "8px", color: "var(--cyan)", fontSize: "11px", padding: "8px", cursor: "pointer", fontFamily: "var(--font-mono)" }}
                 >
-                  âœ“ Release
+                  ✓ Release
                 </button>
 
                 {/* Refund (only if expired) */}
@@ -185,7 +185,7 @@ function EscrowList({
                     onClick={() => onRefund(e.id)}
                     style={{ flex: 1, minWidth: "80px", background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: "8px", color: "var(--text-dim)", fontSize: "11px", padding: "8px", cursor: "pointer", fontFamily: "var(--font-mono)" }}
                   >
-                    â†© Refund
+                    ↩ Refund
                   </button>
                 )}
 
@@ -193,12 +193,12 @@ function EscrowList({
                 {e.arbiter !== "0x0000000000000000000000000000000000000000" && !e.isExpired && (
                   <button
                     onClick={() => {
-                      const reason = window.prompt("Dispute à¤•à¤¾ à¤•à¤¾à¤°à¤£ à¤¬à¤¤à¤¾à¤à¤‚:")
+                      const reason = window.prompt("Dispute का कारण बताएं:")
                       if (reason) onDispute(e.id, reason)
                     }}
                     style={{ flex: 1, minWidth: "80px", background: "#F59E0B12", border: "1px solid #F59E0B44", borderRadius: "8px", color: "var(--amber)", fontSize: "11px", padding: "8px", cursor: "pointer", fontFamily: "var(--font-mono)" }}
                   >
-                    âš  Dispute
+                    ⚠  Dispute
                   </button>
                 )}
 
@@ -208,7 +208,7 @@ function EscrowList({
                   target="_blank" rel="noopener noreferrer"
                   style={{ background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: "8px", color: "var(--cyan)", fontSize: "11px", padding: "8px 10px", textDecoration: "none", display: "flex", alignItems: "center" }}
                 >
-                  â†—
+                  ↗
                 </a>
               </div>
             )}
@@ -219,7 +219,7 @@ function EscrowList({
   )
 }
 
-// â”€â”€ CREATE ESCROW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CREATE ESCROW ─────────────────────────────────────────────
 function CreateEscrow({ onNavigate, escrow, toast, onSuccess }: {
   onNavigate: (s: string) => void
   escrow:     ReturnType<typeof useEscrow>
@@ -273,8 +273,8 @@ function CreateEscrow({ onNavigate, escrow, toast, onSuccess }: {
       <div style={{ background: "var(--cyan-glow)", border: "1px solid var(--cyan-dim)", borderRadius: "var(--radius)", padding: "12px 14px", marginBottom: "24px" }}>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--cyan)", fontWeight: "600", marginBottom: "4px" }}>Non-Custodial Escrow</p>
         <p style={{ fontSize: "12px", color: "var(--text-dim)", lineHeight: 1.5 }}>
-          Funds blockchain à¤ªà¤° lock à¤¹à¥‹à¤‚à¤—à¥‡à¥¤ Sender release à¤•à¤°à¤¨à¥‡ à¤ªà¤° recipient à¤•à¥‹ à¤®à¤¿à¤²à¥‡à¤‚à¤—à¥‡ (0.2% fee)à¥¤
-          Deadline à¤•à¥‡ à¤¬à¤¾à¤¦ refund possibleà¥¤
+          Funds blockchain पर lock होंगे। Sender release करने पर recipient को मिलेंगे (0.2% fee)।
+          Deadline के बाद refund possible।
         </p>
       </div>
 
@@ -312,7 +312,7 @@ function CreateEscrow({ onNavigate, escrow, toast, onSuccess }: {
           style={{ ...inputStyle, resize: "none" as const, lineHeight: 1.6 }}
         />
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-muted)", marginTop: "4px" }}>
-          Privacy: à¤•à¥‡à¤µà¤² hash stored on-chainà¥¤ Text local à¤°à¤¹à¤¤à¤¾ à¤¹à¥ˆà¥¤
+          Privacy: केवल hash stored on-chain। Text local रहता है।
         </p>
       </div>
 
@@ -345,7 +345,7 @@ function CreateEscrow({ onNavigate, escrow, toast, onSuccess }: {
           cursor: "pointer", fontFamily: "var(--font-sans)", transition: "all 0.15s",
         }}
       >
-        {!escrow.isContractDeployed ? "Contract Deploy à¤•à¤°à¥‡à¤‚ à¤ªà¤¹à¤²à¥‡" : "Lock Funds in Escrow â†’"}
+        {!escrow.isContractDeployed ? "Contract Deploy करें पहले" : "Lock Funds in Escrow →"}
       </button>
     </div>
   )

@@ -1,6 +1,6 @@
 "use client"
 /**
- * ARCOIN â€” useSendPayment.ts
+ * ARCOIN — useSendPayment.ts
  * Complete payment send flow:
  *   1. OFAC screening
  *   2. validateSend
@@ -61,7 +61,7 @@ const ERC20_TRANSFER_ABI = [
   },
 ] as const
 
-// ArcoinPaymentRouter ABI (routePayment) â€” used once the router is deployed
+// ArcoinPaymentRouter ABI (routePayment) — used once the router is deployed
 const ROUTER_ABI = [
   {
     name: "routePayment",
@@ -105,13 +105,13 @@ export function useSendPayment(): UseSendPayment {
       setTxState({
         status: "failed",
         error:  { code: "privy_session_expired",
-                  message: "Session expire à¤¹à¥‹ à¤—à¤ˆà¥¤ à¤¦à¥‹à¤¬à¤¾à¤°à¤¾ sign in à¤•à¤°à¥‡à¤‚à¥¤" },
+                  message: "Session expire हो गई। दोबारा sign in करें।" },
       })
       return
     }
 
     try {
-      // â”€â”€ STEP 0: Validate inputs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── STEP 0: Validate inputs ──────────────────────────
       const balanceData = await publicClient.readContract({
         address:      TOKENS.USDC.address,
         abi: [{
@@ -129,11 +129,11 @@ export function useSendPayment(): UseSendPayment {
         return
       }
 
-      // â”€â”€ STEP 1: OFAC screening â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── STEP 1: OFAC screening ───────────────────────────
       setTxState({ status: "simulating" })
       await requireCleanAddress(to as `0x${string}`)
 
-      // â”€â”€ STEP 2: Simulate (dry-run, no gas spent) â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── STEP 2: Simulate (dry-run, no gas spent) ─────────
       const amountRaw    = parseUSDC(amount)
       const isRouterLive = !!ARCOIN_CONTRACTS.PaymentRouter
       const contractAddr = isRouterLive ? ARCOIN_CONTRACTS.PaymentRouter : TOKENS.USDC.address
@@ -141,7 +141,7 @@ export function useSendPayment(): UseSendPayment {
       let txHash: `0x${string}`
 
       if (isRouterLive) {
-        // â”€â”€ Router path: routePayment() pulls funds via safeTransferFrom,
+        // ── Router path: routePayment() pulls funds via safeTransferFrom,
         //    so the router needs an allowance first (approve if needed).
         const currentAllowance = await publicClient.readContract({
           address:      TOKENS.USDC.address,
@@ -174,7 +174,7 @@ export function useSendPayment(): UseSendPayment {
           account:      walletAddress,
         })
 
-        // â”€â”€ STEP 3: Sign + broadcast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── STEP 3: Sign + broadcast ─────────────────────────
         setTxState({ status: "signing" })
 
         txHash = await writeContractAsync({
@@ -184,7 +184,7 @@ export function useSendPayment(): UseSendPayment {
           args:         [to as `0x${string}`, amountRaw, note ?? ""],
         })
       } else {
-        // â”€â”€ Fallback path: router not deployed yet, plain ERC-20 transfer
+        // ── Fallback path: router not deployed yet, plain ERC-20 transfer
         await publicClient.simulateContract({
           address:      contractAddr,
           abi:          ERC20_TRANSFER_ABI,
@@ -193,7 +193,7 @@ export function useSendPayment(): UseSendPayment {
           account:      walletAddress,
         })
 
-        // â”€â”€ STEP 3: Sign + broadcast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // ── STEP 3: Sign + broadcast ─────────────────────────
         setTxState({ status: "signing" })
 
         txHash = await writeContractAsync({
@@ -204,7 +204,7 @@ export function useSendPayment(): UseSendPayment {
         })
       }
 
-      // â”€â”€ STEP 4: Wait for confirmation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── STEP 4: Wait for confirmation ────────────────────
       setTxState({ status: "confirming", hash: txHash })
 
       await publicClient.waitForTransactionReceipt({
@@ -214,11 +214,11 @@ export function useSendPayment(): UseSendPayment {
         timeout:            60_000,
       })
 
-      // â”€â”€ STEP 5: Success â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── STEP 5: Success ──────────────────────────────────
       setTxState({ status: "success", hash: txHash })
 
     } catch (err: unknown) {
-      // User cancelled â†’ don't show error (silent)
+      // User cancelled → don't show error (silent)
       const msg = err instanceof Error ? err.message : ""
       if (msg.toLowerCase().includes("user rejected") ||
           msg.toLowerCase().includes("user denied")) {

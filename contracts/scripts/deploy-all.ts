@@ -1,13 +1,13 @@
 /**
- * ARCOIN â€” deploy-all.ts
+ * ARCOIN — deploy-all.ts
  * Master deployment script. Deploys all contracts in dependency order.
  *
- * ORDER (cannot be changed â€” contracts reference each other):
+ * ORDER (cannot be changed — contracts reference each other):
  *   1. ArcoinRegistry    (standalone)
  *   2. ArcoinTreasury    (standalone)
  *   3. ArcoinPaymentRouter (needs Treasury address)
  *   4. Treasury.setCollectorApproved(PaymentRouter, true)
- *   5. Sablier V2 (NFTDescriptor â†’ LockupLinear â†’ LockupDynamic)
+ *   5. Sablier V2 (NFTDescriptor → LockupLinear → LockupDynamic)
  *
  * Post-deploy:
  *   6. Update constants.ts with all addresses
@@ -22,7 +22,7 @@ import { ethers } from "hardhat"
 import * as fs    from "fs"
 import * as path  from "path"
 
-// â”€â”€ CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CONFIG ────────────────────────────────────────────────────
 const USDC       = "0x3600000000000000000000000000000000000000"
 
 // These must be real multisig addresses before mainnet
@@ -45,50 +45,50 @@ async function main() {
   const communityMsig    = COMMUNITY_MULTISIG || deployer.address
   const treasury_owner   = TREASURY_MULTISIG  || deployer.address
 
-  console.log("â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—")
-  console.log("â•‘      ARCOIN â€” FULL CONTRACT DEPLOYMENT           â•‘")
-  console.log("â• â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•£")
-  console.log(`â•‘  Network:    Arc Testnet (5042002)               â•‘`)
-  console.log(`â•‘  Deployer:   ${deployer.address.slice(0,20)}...  â•‘`)
-  console.log("â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•\n")
+  console.log("╔══════════════════════════════════════════════════╗")
+  console.log("║      ARCOIN — FULL CONTRACT DEPLOYMENT           ║")
+  console.log("╠ ══════════════════════════════════════════════════╣")
+  console.log(`║  Network:    Arc Testnet (5042002)               ║`)
+  console.log(`║  Deployer:   ${deployer.address.slice(0,20)}...  ║`)
+  console.log("╚══════════════════════════════════════════════════╝\n")
 
   const results: Record<string, string> = {}
 
-  // â”€â”€ 1. ArcoinRegistry â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  console.log("â–º [1/5] Deploying ArcoinRegistry (ArcID)...")
+  // ── 1. ArcoinRegistry ────────────────────────────────────
+  console.log("► [1/5] Deploying ArcoinRegistry (ArcID)...")
   const Registry = await ethers.getContractFactory("ArcoinRegistry")
   const registry = await Registry.deploy(USDC, deployer.address, deployer.address)
   await registry.waitForDeployment()
   results.Registry = await registry.getAddress()
-  console.log(`  âœ“ Registry:      ${results.Registry}`)
+  console.log(`  ✓ Registry:      ${results.Registry}`)
 
-  // â”€â”€ 2. ArcoinTreasury â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  console.log("\nâ–º [2/5] Deploying ArcoinTreasury...")
+  // ── 2. ArcoinTreasury ────────────────────────────────────
+  console.log("\n► [2/5] Deploying ArcoinTreasury...")
   const Treasury = await ethers.getContractFactory("ArcoinTreasury")
   const treasury = await Treasury.deploy(
     USDC, devFund, liquidityReserve, communityMsig, deployer.address
   )
   await treasury.waitForDeployment()
   results.Treasury = await treasury.getAddress()
-  console.log(`  âœ“ Treasury:      ${results.Treasury}`)
+  console.log(`  ✓ Treasury:      ${results.Treasury}`)
 
-  // â”€â”€ 3. ArcoinPaymentRouter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  console.log("\nâ–º [3/5] Deploying ArcoinPaymentRouter...")
+  // ── 3. ArcoinPaymentRouter ───────────────────────────────
+  console.log("\n► [3/5] Deploying ArcoinPaymentRouter...")
   const Router = await ethers.getContractFactory("ArcoinPaymentRouter")
   const router = await Router.deploy(USDC, results.Treasury, deployer.address)
   await router.waitForDeployment()
   results.PaymentRouter = await router.getAddress()
-  console.log(`  âœ“ PaymentRouter: ${results.PaymentRouter}`)
+  console.log(`  ✓ PaymentRouter: ${results.PaymentRouter}`)
 
-  // â”€â”€ 4. Approve Router as fee collector â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  console.log("\nâ–º [4/5] Configuring Treasury â†’ approve PaymentRouter...")
+  // ── 4. Approve Router as fee collector ───────────────────
+  console.log("\n► [4/5] Configuring Treasury → approve PaymentRouter...")
   const treasuryContract = await ethers.getContractAt("ArcoinTreasury", results.Treasury)
   const approveTx = await treasuryContract.setCollectorApproved(results.PaymentRouter, true)
   await approveTx.wait()
-  console.log(`  âœ“ PaymentRouter approved as fee collector`)
+  console.log(`  ✓ PaymentRouter approved as fee collector`)
 
-  // â”€â”€ 5. Sablier V2 â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  console.log("\nâ–º [5/5] Deploying Sablier V2...")
+  // ── 5. Sablier V2 ────────────────────────────────────────
+  console.log("\n► [5/5] Deploying Sablier V2...")
   const NFTDesc = await ethers.getContractFactory("SablierV2NFTDescriptor")
   const desc    = await NFTDesc.deploy()
   await desc.waitForDeployment()
@@ -104,19 +104,19 @@ async function main() {
   await dynamic.waitForDeployment()
   results.SablierLockupDynamic = await dynamic.getAddress()
 
-  console.log(`  âœ“ LockupLinear:  ${results.SablierLockupLinear}`)
-  console.log(`  âœ“ LockupDynamic: ${results.SablierLockupDynamic}`)
+  console.log(`  ✓ LockupLinear:  ${results.SablierLockupLinear}`)
+  console.log(`  ✓ LockupDynamic: ${results.SablierLockupDynamic}`)
 
-  // â”€â”€ OUTPUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  console.log("\nâ•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—")
-  console.log("â•‘   DEPLOYMENT COMPLETE â€” COPY TO constants.ts    â•‘")
-  console.log("â• â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•£")
+  // ── OUTPUT ────────────────────────────────────────────────
+  console.log("\n╔══════════════════════════════════════════════════╗")
+  console.log("║   DEPLOYMENT COMPLETE — COPY TO constants.ts    ║")
+  console.log("╠ ══════════════════════════════════════════════════╣")
   Object.entries(results).forEach(([k, v]) => {
-    console.log(`â•‘  ${k.padEnd(24)} ${v.slice(0,20)}...  â•‘`)
+    console.log(`║  ${k.padEnd(24)} ${v.slice(0,20)}...  ║`)
   })
-  console.log("â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•")
+  console.log("╚══════════════════════════════════════════════════╝")
 
-  // â”€â”€ Auto-write deployment JSON â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Auto-write deployment JSON ────────────────────────────
   const deploymentData = {
     network:     "arc-testnet",
     chainId:     5042002,
@@ -130,7 +130,7 @@ async function main() {
   fs.writeFileSync(outPath, JSON.stringify(deploymentData, null, 2))
   console.log(`\n  Saved to: contracts/deployments/arc-testnet.json`)
 
-  // â”€â”€ constants.ts patch instructions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── constants.ts patch instructions ──────────────────────
   console.log("\n  Patch constants.ts with these values:")
   console.log(`
   export const ARCOIN_CONTRACTS = {
@@ -146,7 +146,7 @@ async function main() {
   }
   `)
 
-  // â”€â”€ Verification commands â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Verification commands ─────────────────────────────────
   console.log("  Blockscout Verification Commands:")
   console.log(`  npx hardhat verify --network arc-testnet ${results.Registry} "${USDC}" "${deployer.address}" "${deployer.address}"`)
   console.log(`  npx hardhat verify --network arc-testnet ${results.Treasury} "${USDC}" "${devFund}" "${liquidityReserve}" "${communityMsig}" "${deployer.address}"`)

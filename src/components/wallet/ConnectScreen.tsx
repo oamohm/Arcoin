@@ -1,10 +1,10 @@
 "use client"
 /**
- * ARCOIN â€” wallet/ConnectScreen.tsx
+ * ARCOIN — wallet/ConnectScreen.tsx
  * Landing screen for unauthenticated users.
  * Dual entry: Email MPC (Privy) + Injected wallet (wagmi).
  *
- * i18n: Dashboard Â· ConnectScreen Â· SendScreen only.
+ * i18n: Dashboard · ConnectScreen · SendScreen only.
  * Layout and styling unchanged.
  */
 
@@ -25,7 +25,7 @@ export function ConnectScreen() {
       background: "var(--bg)",
     }}>
 
-      {/* Language toggle â€” top right */}
+      {/* Language toggle — top right */}
       <div style={{ position: "absolute", top: "16px", right: "16px" }}>
         <button
           onClick={() => setLocale(locale === "en" ? "hi" : "en")}
@@ -40,7 +40,7 @@ export function ConnectScreen() {
             cursor:        "pointer",
           }}
         >
-          {locale === "en" ? "à¤¹à¤¿à¤¨à¥à¤¦à¥€" : "EN"}
+          {locale === "en" ? "हिन्दी" : "EN"}
         </button>
       </div>
 
@@ -52,7 +52,7 @@ export function ConnectScreen() {
         fontSize: "38px", background: "var(--cyan-glow)",
         marginBottom: "28px",
         animation: "logo-glow 3s ease-in-out infinite",
-      }}>â—ˆ</div>
+      }}>◈</div>
 
       <h1 style={{
         fontFamily: "var(--font-mono)", fontSize: "28px", fontWeight: "700",

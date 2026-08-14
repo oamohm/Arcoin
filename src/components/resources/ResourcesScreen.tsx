@@ -1,16 +1,16 @@
 "use client"
 /**
- * ARCOIN â€” ResourcesScreen.tsx
+ * ARCOIN — ResourcesScreen.tsx
  * Resources hub: AI Help (Claude API), Faucet, Links, Gov info.
  *
  * AI Help: Uses Anthropic Claude API via Next.js API route.
- * The API key stays server-side (ANTHROPIC_API_KEY â€” never NEXT_PUBLIC_).
+ * The API key stays server-side (ANTHROPIC_API_KEY — never NEXT_PUBLIC_).
  */
 
 import { useState, useRef, useEffect } from "react"
 import { APP, EXPLORER }               from "@/lib/constants"
 
-// â”€â”€ MESSAGE TYPES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── MESSAGE TYPES ─────────────────────────────────────────────
 interface Message {
   role:    "user" | "assistant"
   content: string
@@ -18,11 +18,11 @@ interface Message {
 }
 
 const QUICK_QUESTIONS = [
-  "USDC à¤•à¥‹ Arc Network à¤ªà¤° à¤•à¥ˆà¤¸à¥‡ à¤­à¥‡à¤œà¥‡à¤‚?",
-  "Payment stream à¤•à¥à¤¯à¤¾ à¤¹à¥‹à¤¤à¥€ à¤¹à¥ˆ?",
-  "Swap à¤•à¥ˆà¤¸à¥‡ à¤•à¤¾à¤® à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆ?",
-  "ArcID register à¤•à¥ˆà¤¸à¥‡ à¤•à¤°à¥‡à¤‚?",
-  "Escrow à¤•à¥à¤¯à¤¾ à¤¹à¥ˆ à¤”à¤° à¤•à¤¬ use à¤•à¤°à¥‡à¤‚?",
+  "USDC को Arc Network पर कैसे भेजें?",
+  "Payment stream क्या होती है?",
+  "Swap कैसे काम करता है?",
+  "ArcID register कैसे करें?",
+  "Escrow क्या है और कब use करें?",
 ]
 
 const SYSTEM_PROMPT = `You are Arcoin's helpful AI assistant. Arcoin is a DeFi payment hub built on Arc Network (Chain ID 5042002) using USDC as the native gas token.
@@ -39,7 +39,7 @@ Key facts:
 
 Answer in Hindi or English based on what the user writes. Be concise and practical. Never give financial advice.`
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export function ResourcesScreen({ onNavigate }: { onNavigate: (s: string) => void }) {
   const [activeTab, setActiveTab] = useState<"ai" | "links" | "gov">("ai")
 
@@ -55,7 +55,7 @@ export function ResourcesScreen({ onNavigate }: { onNavigate: (s: string) => voi
         backdropFilter: "blur(12px)",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <button onClick={() => onNavigate("dashboard")} style={{ background: "none", border: "none", color: "var(--text-dim)", fontSize: "20px", cursor: "pointer" }}>â†</button>
+          <button onClick={() => onNavigate("dashboard")} style={{ background: "none", border: "none", color: "var(--text-dim)", fontSize: "20px", cursor: "pointer" }}>←</button>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "13px", letterSpacing: "0.1em", color: "var(--text)", textTransform: "uppercase", fontWeight: "600" }}>
             Resources
           </span>
@@ -93,7 +93,7 @@ export function ResourcesScreen({ onNavigate }: { onNavigate: (s: string) => voi
   )
 }
 
-// â”€â”€ AI HELP TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── AI HELP TAB ───────────────────────────────────────────────
 function AIHelpTab() {
   const [messages,   setMessages]   = useState<Message[]>([])
   const [input,      setInput]      = useState("")
@@ -129,13 +129,13 @@ function AIHelpTab() {
 
       setMessages(prev => [...prev, {
         role:    "assistant",
-        content: data.content ?? "à¤¸à¤®à¤ à¤¨à¤¹à¥€à¤‚ à¤†à¤¯à¤¾à¥¤ à¤¦à¥‹à¤¬à¤¾à¤°à¤¾ try à¤•à¤°à¥‡à¤‚à¥¤",
+        content: data.content ?? "समझ नहीं आया। दोबारा try करें।",
         time:    now(),
       }])
     } catch {
       setMessages(prev => [...prev, {
         role:    "assistant",
-        content: "AI temporarily unavailableà¥¤ Docs à¤¦à¥‡à¤–à¥‡à¤‚: docs.arc.io",
+        content: "AI temporarily unavailable। Docs देखें: docs.arc.io",
         time:    now(),
       }])
     } finally {
@@ -150,7 +150,7 @@ function AIHelpTab() {
       <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>
         {messages.length === 0 && (
           <div style={{ textAlign: "center", padding: "24px 0" }}>
-            <div style={{ fontSize: "32px", marginBottom: "12px" }}>â—ˆ</div>
+            <div style={{ fontSize: "32px", marginBottom: "12px" }}>◈</div>
             <p style={{ fontFamily: "var(--font-mono)", fontSize: "12px", color: "var(--text-dim)", marginBottom: "20px" }}>
               Arcoin AI Assistant<br />
               <span style={{ color: "var(--text-muted)", fontSize: "10px" }}>Powered by Claude</span>
@@ -197,7 +197,7 @@ function AIHelpTab() {
               display: "flex", alignItems: "center", justifyContent: "center",
               fontSize: "12px", color: msg.role === "user" ? "var(--cyan)" : "var(--text-dim)",
             }}>
-              {msg.role === "user" ? "U" : "â—ˆ"}
+              {msg.role === "user" ? "U" : "◈"}
             </div>
 
             {/* Bubble */}
@@ -231,7 +231,7 @@ function AIHelpTab() {
 
         {isLoading && (
           <div style={{ display: "flex", gap: "10px", alignItems: "flex-end", marginBottom: "12px" }}>
-            <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "var(--surface2)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "var(--text-dim)" }}>â—ˆ</div>
+            <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "var(--surface2)", border: "1px solid var(--border)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "var(--text-dim)" }}>◈</div>
             <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "16px 16px 16px 4px", padding: "12px 16px" }}>
               <div style={{ display: "flex", gap: "4px" }}>
                 {[0, 1, 2].map(i => (
@@ -260,7 +260,7 @@ function AIHelpTab() {
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input) } }}
-          placeholder="Arcoin à¤•à¥‡ à¤¬à¤¾à¤°à¥‡ à¤®à¥‡à¤‚ à¤ªà¥‚à¤›à¥‡à¤‚..."
+          placeholder="Arcoin के बारे में पूछें..."
           style={{
             flex:         1,
             background:   "var(--surface)",
@@ -291,35 +291,35 @@ function AIHelpTab() {
             transition:    "all 0.15s",
           }}
         >
-          â†‘
+          ↑
         </button>
       </div>
     </div>
   )
 }
 
-// â”€â”€ LINKS TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── LINKS TAB ─────────────────────────────────────────────────
 function LinksTab() {
   const links = [
     { category: "Arc Network",
       items: [
-        { label: "Arc Docs",        url: "https://docs.arc.io",                          icon: "ðŸ“–" },
-        { label: "Blockscout",      url: "https://atlas.blockscout.com",                 icon: "â¬¡"  },
-        { label: "Testnet Faucet",  url: "https://faucet.circle.com",                    icon: "â›½" },
-        { label: "Arc Network",     url: "https://arc.network",                          icon: "â—ˆ"  },
+        { label: "Arc Docs",        url: "https://docs.arc.io",                          icon: "📖" },
+        { label: "Blockscout",      url: "https://atlas.blockscout.com",                 icon: "⬡"  },
+        { label: "Testnet Faucet",  url: "https://faucet.circle.com",                    icon: "⛽" },
+        { label: "Arc Network",     url: "https://arc.network",                          icon: "◈"  },
       ]
     },
     { category: "DEX & Protocols",
       items: [
-        { label: "APEXISWAP",       url: "https://www.apexiswap.com",                   icon: "âš¡" },
-        { label: "Circle Developer",url: "https://developers.circle.com",                icon: "â—¯"  },
-        { label: "Sablier V2",      url: "https://sablier.com",                         icon: "âŸ³"  },
+        { label: "APEXISWAP",       url: "https://www.apexiswap.com",                   icon: "⚡" },
+        { label: "Circle Developer",url: "https://developers.circle.com",                icon: "◯"  },
+        { label: "Sablier V2",      url: "https://sablier.com",                         icon: "⟳"  },
       ]
     },
     { category: "Arcoin",
       items: [
-        { label: "Arcoin App",      url: APP.url,                                        icon: "â—ˆ"  },
-        { label: "GitHub",          url: "https://github.com",                           icon: "âŒ¥"  },
+        { label: "Arcoin App",      url: APP.url,                                        icon: "◈"  },
+        { label: "GitHub",          url: "https://github.com",                           icon: "⌥"  },
       ]
     },
   ]
@@ -349,7 +349,7 @@ function LinksTab() {
               >
                 <span style={{ fontSize: "18px", width: "24px", textAlign: "center" }}>{item.icon}</span>
                 <span style={{ flex: 1, fontSize: "13px", color: "var(--text)", fontWeight: "500" }}>{item.label}</span>
-                <span style={{ fontSize: "14px", color: "var(--cyan)" }}>â†—</span>
+                <span style={{ fontSize: "14px", color: "var(--cyan)" }}>↗</span>
               </a>
             ))}
           </div>
@@ -359,25 +359,25 @@ function LinksTab() {
   )
 }
 
-// â”€â”€ GOV TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── GOV TAB ───────────────────────────────────────────────────
 function GovTab() {
   return (
     <div style={{ padding: "16px" }}>
       <div style={{ background: "var(--cyan-glow)", border: "1px solid var(--cyan-dim)", borderRadius: "var(--radius)", padding: "14px", marginBottom: "16px" }}>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--cyan)", fontWeight: "600", marginBottom: "4px" }}>
-          Governance â€” Phase 4
+          Governance — Phase 4
         </p>
         <p style={{ fontSize: "12px", color: "var(--text-dim)", lineHeight: 1.6 }}>
-          Protocol fee rates, treasury allocation, à¤”à¤° upgrades â€” à¤¸à¤¬ on-chain voting à¤¸à¥‡ control à¤¹à¥‹à¤‚à¤—à¥‡à¥¤
+          Protocol fee rates, treasury allocation, और upgrades — सब on-chain voting से control होंगे।
         </p>
       </div>
 
       {[
-        { label: "Protocol Fee", value: "0.1% (10 bps)", desc: "Swap + Stream + Escrow à¤ªà¤°" },
+        { label: "Protocol Fee", value: "0.1% (10 bps)", desc: "Swap + Stream + Escrow पर" },
         { label: "Treasury Split", value: "60/25/15", desc: "Dev / Liquidity / Community" },
-        { label: "Fee Changes", value: "Governance Vote", desc: "Admin override à¤¨à¤¹à¥€à¤‚ â€” vote required" },
-        { label: "Timelock", value: "72 hours", desc: "Distribution execute à¤¹à¥‹à¤¨à¥‡ à¤¸à¥‡ à¤ªà¤¹à¤²à¥‡" },
-        { label: "Escrow Fee", value: "0.2%", desc: "Release à¤ªà¤° only â€” create à¤ªà¤° à¤¨à¤¹à¥€à¤‚" },
+        { label: "Fee Changes", value: "Governance Vote", desc: "Admin override नहीं — vote required" },
+        { label: "Timelock", value: "72 hours", desc: "Distribution execute होने से पहले" },
+        { label: "Escrow Fee", value: "0.2%", desc: "Release पर only — create पर नहीं" },
       ].map(row => (
         <div key={row.label} style={{
           background: "var(--surface)", border: "1px solid var(--border)",
@@ -396,10 +396,10 @@ function GovTab() {
       <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius)", padding: "14px", marginTop: "8px" }}>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-dim)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: "8px" }}>Treasury Contracts</p>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--text-dim)", lineHeight: 1.7 }}>
-          ArcoinTreasury.sol â€” 72h timelock, 3-allocation split<br/>
-          ArcoinPaymentRouter.sol â€” 0.1% auto-collect<br/>
-          ArcoinEscrow.sol â€” 0.2% on release<br/>
-          ArcoinRegistry.sol â€” 1 USDC/year ArcID fee
+          ArcoinTreasury.sol — 72h timelock, 3-allocation split<br/>
+          ArcoinPaymentRouter.sol — 0.1% auto-collect<br/>
+          ArcoinEscrow.sol — 0.2% on release<br/>
+          ArcoinRegistry.sol — 1 USDC/year ArcID fee
         </p>
       </div>
     </div>

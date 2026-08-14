@@ -1,16 +1,16 @@
 "use client"
 import React, { useState } from "react"
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// ARCOIN â€” layout + screen components (bundled for efficiency)
-// WelcomeModal Â· BottomNav Â· MoreScreen
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════════
+// ARCOIN — layout + screen components (bundled for efficiency)
+// WelcomeModal · BottomNav · MoreScreen
+// ═══════════════════════════════════════════════════════════
 
 import { usePrivy }    from "@privy-io/react-auth"
 import { useArcID }   from "@/hooks/useArcID"
 import { APP, EXPLORER } from "@/lib/constants"
 import type { AppTab }   from "@/types"
 
-// â”€â”€ WELCOME MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── WELCOME MODAL ─────────────────────────────────────────
 export function WelcomeModal({ onClose }: { onClose: () => void }) {
   return (
     <div style={{
@@ -29,24 +29,24 @@ export function WelcomeModal({ onClose }: { onClose: () => void }) {
           borderRadius: "18px", display: "flex", alignItems: "center",
           justifyContent: "center", fontSize: "28px", background: "var(--cyan-glow)",
           margin: "0 auto 20px", animation: "logo-glow 3s ease-in-out infinite",
-        }}>â—ˆ</div>
+        }}>◈</div>
 
         <h2 style={{
           fontFamily: "var(--font-mono)", fontSize: "20px", fontWeight: "700",
           color: "var(--text)", textAlign: "center", marginBottom: "6px",
         }}>
-          Arcoin à¤®à¥‡à¤‚ à¤¸à¥à¤µà¤¾à¤—à¤¤ à¤¹à¥ˆ
+          Arcoin में स्वागत है
         </h2>
         <p style={{ fontSize: "13px", color: "var(--text-dim)", textAlign: "center",
                     marginBottom: "24px", lineHeight: 1.6 }}>
-          Arc Network à¤•à¤¾ DeFi Operating Systemà¥¤<br />
-          Send Â· Stream Â· Swap â€” à¤à¤• à¤œà¤—à¤¹à¥¤
+          Arc Network का DeFi Operating System।<br />
+          Send · Stream · Swap — एक जगह।
         </p>
 
         {/* Network info */}
         <div style={{ background: "var(--bg)", borderRadius: "var(--radius)", padding: "14px", marginBottom: "20px" }}>
           {[
-            { label: "Network",  value: "â— Arc Testnet", color: "var(--green)" },
+            { label: "Network",  value: "● Arc Testnet", color: "var(--green)" },
             { label: "Chain ID", value: "5042002" },
             { label: "Gas Token",value: "USDC",          color: "var(--cyan)"  },
             { label: "Explorer", value: "Blockscout"     },
@@ -76,14 +76,14 @@ export function WelcomeModal({ onClose }: { onClose: () => void }) {
             cursor: "pointer", fontFamily: "var(--font-sans)",
           }}
         >
-          Dashboard à¤ªà¤° à¤œà¤¾à¤à¤‚ â†’
+          Dashboard पर जाएं →
         </button>
 
         <p style={{ textAlign: "center", marginTop: "14px", fontSize: "12px", color: "var(--text-dim)" }}>
-          Test USDC à¤šà¤¾à¤¹à¤¿à¤? â†’&nbsp;
+          Test USDC चाहिए? →&nbsp;
           <a href={APP.faucet} target="_blank" rel="noopener noreferrer"
              style={{ color: "var(--cyan)", textDecoration: "none" }}>
-            faucet.circle.com â†—
+            faucet.circle.com ↗
           </a>
         </p>
       </div>
@@ -91,13 +91,13 @@ export function WelcomeModal({ onClose }: { onClose: () => void }) {
   )
 }
 
-// â”€â”€ BOTTOM NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── BOTTOM NAV ────────────────────────────────────────────
 const NAV_ITEMS: { id: AppTab; icon: string; label: string }[] = [
-  { id: "dashboard", icon: "â¬¡", label: "Dashboard" },
-  { id: "pay",       icon: "â†‘", label: "Pay"       },
-  { id: "stream",    icon: "âŸ³", label: "Stream"    },
-  { id: "audit",     icon: "â‰¡", label: "Audit"     },
-  { id: "more",      icon: "â—Ž", label: "More"      },
+  { id: "dashboard", icon: "⬡", label: "Dashboard" },
+  { id: "pay",       icon: "↑", label: "Pay"       },
+  { id: "stream",    icon: "⟳", label: "Stream"    },
+  { id: "audit",     icon: "≡", label: "Audit"     },
+  { id: "more",      icon: "◎", label: "More"      },
 ]
 
 export function BottomNav({
@@ -152,27 +152,27 @@ export function BottomNav({
   )
 }
 
-// â”€â”€ MORE SCREEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── MORE SCREEN ───────────────────────────────────────────
 export function MoreScreen({ onNavigate }: { onNavigate: (s: string) => void }) {
   const { user, logout } = usePrivy()
   const arcId = useArcID()
   const address = user?.wallet?.address ?? ""
-  const shortAddr = address ? `${address.slice(0,6)}...${address.slice(-4)}` : "â€”"
+  const shortAddr = address ? `${address.slice(0,6)}...${address.slice(-4)}` : "—"
   const [registerName, setRegisterName] = React.useState("")
   const [showRegister, setShowRegister] = React.useState(false)
 
   const resources = [
-    { label: "Get Testnet USDC",    sub: "faucet.circle.com",    icon: "â›½", href: APP.faucet     },
-    { label: "Blockscout Explorer", sub: "atlas.blockscout.com", icon: "â¬¡", href: "https://atlas.blockscout.com" },
-    { label: "Arc Documentation",   sub: "docs.arc.io",          icon: "ðŸ“–", href: APP.arcDocs    },
-    { label: "APEXISWAP DEX",       sub: "apexiswap.com",        icon: "âš¡", href: APP.apexiswap  },
-    { label: "Circle Developer",    sub: "developers.circle.com",icon: "â—¯",  href: APP.circleDev  },
+    { label: "Get Testnet USDC",    sub: "faucet.circle.com",    icon: "⛽", href: APP.faucet     },
+    { label: "Blockscout Explorer", sub: "atlas.blockscout.com", icon: "⬡", href: "https://atlas.blockscout.com" },
+    { label: "Arc Documentation",   sub: "docs.arc.io",          icon: "📖", href: APP.arcDocs    },
+    { label: "APEXISWAP DEX",       sub: "apexiswap.com",        icon: "⚡", href: APP.apexiswap  },
+    { label: "Circle Developer",    sub: "developers.circle.com",icon: "◯",  href: APP.circleDev  },
   ]
 
   const internalLinks = [
-    { label: "P2P/B2B Escrow",      sub: "Non-custodial deal lock",  icon: "âš–", screen: "escrow"    },
-    { label: "AI Help",             sub: "Claude-powered assistant",  icon: "â—ˆ", screen: "resources" },
-    { label: "Gov & Protocol Info", sub: "Fees, treasury, voting",   icon: "âš™", screen: "resources" },
+    { label: "P2P/B2B Escrow",      sub: "Non-custodial deal lock",  icon: "⚖", screen: "escrow"    },
+    { label: "AI Help",             sub: "Claude-powered assistant",  icon: "◈", screen: "resources" },
+    { label: "Gov & Protocol Info", sub: "Fees, treasury, voting",   icon: "⚙", screen: "resources" },
   ]
 
   return (
@@ -186,12 +186,12 @@ export function MoreScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <div style={{ width: "28px", height: "28px", border: "1.5px solid var(--cyan)", borderRadius: "8px",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: "14px", background: "var(--cyan-glow)" }}>â—ˆ</div>
+                        fontSize: "14px", background: "var(--cyan-glow)" }}>◈</div>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "15px", fontWeight: "700",
                          color: "var(--cyan)", letterSpacing: "0.08em" }}>ARCOIN</span>
         </div>
         <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-dim)" }}>
-          v1.0 Â· Phase 1
+          v1.0 · Phase 1
         </span>
       </div>
 
@@ -218,7 +218,7 @@ export function MoreScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
                 <p style={{ fontSize: "13px", color: "var(--text)", fontWeight: "500" }}>{r.label}</p>
                 <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-dim)", marginTop: "2px" }}>{r.sub}</p>
               </div>
-              <span style={{ color: "var(--text-muted)", fontSize: "14px" }}>â†—</span>
+              <span style={{ color: "var(--text-muted)", fontSize: "14px" }}>↗</span>
             </a>
           ))}
         </div>
@@ -249,7 +249,7 @@ export function MoreScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
                   fontFamily: "var(--font-mono)",
                 }}
               >
-                Register ArcID â€” 1 USDC/year
+                Register ArcID — 1 USDC/year
               </button>
             ) : (
               <div style={{ display: "flex", gap: "8px" }}>
@@ -306,7 +306,7 @@ export function MoreScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
                 <p style={{ fontSize: "13px", color: "var(--text)", fontWeight: "500" }}>{item.label}</p>
                 <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-dim)", marginTop: "2px" }}>{item.sub}</p>
               </div>
-              <span style={{ color: "var(--cyan)", fontSize: "14px" }}>â†’</span>
+              <span style={{ color: "var(--cyan)", fontSize: "14px" }}>→</span>
             </button>
           ))}
         </div>

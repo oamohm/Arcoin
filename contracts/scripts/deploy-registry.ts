@@ -1,5 +1,5 @@
 /**
- * ARCOIN â€” deploy-registry.ts
+ * ARCOIN — deploy-registry.ts
  * Hardhat deployment script for ArcoinRegistry (ArcID).
  *
  * Prerequisites:
@@ -12,24 +12,24 @@
 
 import { ethers } from "hardhat"
 
-// â”€â”€ VERIFIED ADDRESSES (Arc Testnet) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── VERIFIED ADDRESSES (Arc Testnet) ────────────────────────
 const USDC_ADDRESS     = "0x3600000000000000000000000000000000000000"
 
 // TODO: Replace with your actual multisig treasury address
-// Use a Gnosis Safe or similar â€” NOT an EOA
+// Use a Gnosis Safe or similar — NOT an EOA
 const TREASURY_ADDRESS = process.env.TREASURY_MULTISIG ?? ""
 
 async function main() {
   const [deployer] = await ethers.getSigners()
 
-  console.log("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•")
-  console.log("  ARCOIN REGISTRY â€” DEPLOYMENT")
-  console.log("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•")
+  console.log("═══════════════════════════════════════════")
+  console.log("  ARCOIN REGISTRY — DEPLOYMENT")
+  console.log("═══════════════════════════════════════════")
   console.log(`  Network:   Arc Testnet (5042002)`)
   console.log(`  Deployer:  ${deployer.address}`)
   console.log(`  USDC:      ${USDC_ADDRESS}`)
   console.log(`  Treasury:  ${TREASURY_ADDRESS}`)
-  console.log("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•")
+  console.log("═══════════════════════════════════════════")
 
   if (!TREASURY_ADDRESS || TREASURY_ADDRESS === "") {
     throw new Error("TREASURY_MULTISIG env variable not set. Set a real multisig address.")
@@ -45,21 +45,21 @@ async function main() {
   const registry = await Registry.deploy(
     USDC_ADDRESS,
     TREASURY_ADDRESS,
-    deployer.address,   // initial owner â€” TRANSFER to multisig after deploy
+    deployer.address,   // initial owner — TRANSFER to multisig after deploy
   )
 
   await registry.waitForDeployment()
   const registryAddress = await registry.getAddress()
 
-  console.log(`\n  âœ“ ArcoinRegistry deployed`)
+  console.log(`\n  ✓ ArcoinRegistry deployed`)
   console.log(`    Address:     ${registryAddress}`)
   console.log(`    Tx:          ${registry.deploymentTransaction()?.hash}`)
   console.log(`    Explorer:    https://atlas.blockscout.com/address/${registryAddress}`)
 
-  // â”€â”€ POST-DEPLOY CHECKLIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  console.log("\nâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•")
+  // ── POST-DEPLOY CHECKLIST ──────────────────────────────────
+  console.log("\n═══════════════════════════════════════════")
   console.log("  POST-DEPLOY STEPS (DO THIS NOW)")
-  console.log("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•")
+  console.log("═══════════════════════════════════════════")
   console.log(`  1. Add to constants.ts:`)
   console.log(`     Registry: "${registryAddress}"`)
   console.log(`  2. Transfer ownership to multisig:`)
@@ -69,7 +69,7 @@ async function main() {
   console.log(`       "${USDC_ADDRESS}" "${TREASURY_ADDRESS}" "${deployer.address}"`)
   console.log(`  4. Test registration:`)
   console.log(`     npx hardhat run contracts/scripts/test-registry.ts --network arc-testnet`)
-  console.log("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•\n")
+  console.log("═══════════════════════════════════════════\n")
 }
 
 main().catch(err => {

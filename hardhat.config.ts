@@ -6,7 +6,7 @@ dotenv.config({ path: ".env.local" })
 const DEPLOYER_PRIVATE_KEY = process.env.DEPLOYER_PRIVATE_KEY ?? ""
 
 if (!DEPLOYER_PRIVATE_KEY && process.env.NODE_ENV !== "test") {
-  console.warn("âš   DEPLOYER_PRIVATE_KEY not set in .env.local")
+  console.warn("⚠   DEPLOYER_PRIVATE_KEY not set in .env.local")
 }
 
 const config: HardhatUserConfig = {

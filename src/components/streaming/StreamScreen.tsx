@@ -1,6 +1,6 @@
 "use client"
 /**
- * ARCOIN â€” StreamScreen.tsx
+ * ARCOIN — StreamScreen.tsx
  * Payment streaming interface. Wired to useSablier hook.
  *
  * Features:
@@ -58,19 +58,19 @@ export function StreamScreen({ onNavigate }: { onNavigate: (s: string) => void }
             <button onClick={() => setView("list")} style={{
               background: "none", border: "none", color: "var(--text-dim)",
               fontSize: "20px", cursor: "pointer",
-            }}>â†</button>
+            }}>←</button>
           ) : (
             <button onClick={() => onNavigate("dashboard")} style={{
               background: "none", border: "none", color: "var(--text-dim)",
               fontSize: "20px", cursor: "pointer",
-            }}>â†</button>
+            }}>←</button>
           )}
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "13px",
                          letterSpacing: "0.1em", color: "var(--text)",
                          textTransform: "uppercase", fontWeight: "600" }}>
             {view === "list"   ? "Payment Streams"
              : view === "create" ? "New Stream"
-             : "StreamSplitâ„¢"}
+             : "StreamSplit™"}
           </span>
         </div>
         {view === "list" && (
@@ -83,7 +83,7 @@ export function StreamScreen({ onNavigate }: { onNavigate: (s: string) => void }
                 padding: "6px 10px", cursor: "pointer", fontFamily: "var(--font-mono)",
               }}
             >
-              ðŸ“‹ Bulk
+              📋 Bulk
             </button>
             <button
               onClick={() => setView("create")}
@@ -107,7 +107,7 @@ export function StreamScreen({ onNavigate }: { onNavigate: (s: string) => void }
   )
 }
 
-// â”€â”€ STREAM LIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── STREAM LIST ───────────────────────────────────────────────
 function StreamList({ streams, sablier, toast }: {
   streams: Stream[]
   sablier: ReturnType<typeof useSablier>
@@ -119,9 +119,9 @@ function StreamList({ streams, sablier, toast }: {
     return (
       <div style={{ flex: 1, display: "flex", flexDirection: "column",
                     alignItems: "center", justifyContent: "center", padding: "40px 24px", textAlign: "center" }}>
-        <div style={{ fontSize: "40px", marginBottom: "16px" }}>âŸ³</div>
+        <div style={{ fontSize: "40px", marginBottom: "16px" }}>⟳</div>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "13px", color: "var(--text-dim)" }}>
-          à¤•à¥‹à¤ˆ active stream à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆà¥¤<br />+ New à¤¸à¥‡ à¤¶à¥à¤°à¥‚ à¤•à¤°à¥‡à¤‚à¥¤
+          कोई active stream नहीं है।<br />+ New से शुरू करें।
         </p>
       </div>
     )
@@ -157,7 +157,7 @@ function StreamList({ streams, sablier, toast }: {
                 <div>
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: "13px",
                                  color: "var(--text)", fontWeight: "600" }}>
-                    â†’ {stream.recipient.slice(0,6)}...{stream.recipient.slice(-4)}
+                    → {stream.recipient.slice(0,6)}...{stream.recipient.slice(-4)}
                   </span>
                   <span style={{
                     marginLeft: "8px",
@@ -228,7 +228,7 @@ function StreamList({ streams, sablier, toast }: {
                         fontFamily:   "var(--font-mono)",
                       }}
                     >
-                      â†“ Withdraw
+                      ↓ Withdraw
                     </button>
                     {stream.cancelable && (
                       <button
@@ -245,14 +245,14 @@ function StreamList({ streams, sablier, toast }: {
                           fontFamily:   "var(--font-mono)",
                         }}
                       >
-                        âœ• Cancel
+                        ✕ Cancel
                       </button>
                     )}
                   </>
                 )}
                 {/* Arcoin Proof */}
                 <button
-                  onClick={() => toast.info("Arcoin Proof", "PDF generation Phase 2 à¤®à¥‡à¤‚ à¤† à¤°à¤¹à¤¾ à¤¹à¥ˆà¥¤")}
+                  onClick={() => toast.info("Arcoin Proof", "PDF generation Phase 2 में आ रहा है।")}
                   style={{
                     flex:         isActive ? 0 : 1,
                     background:   "var(--surface2)",
@@ -266,7 +266,7 @@ function StreamList({ streams, sablier, toast }: {
                     whiteSpace:   "nowrap",
                   }}
                 >
-                  â†“ Proof
+                  ↓ Proof
                 </button>
 
                 <a
@@ -287,7 +287,7 @@ function StreamList({ streams, sablier, toast }: {
                     alignItems:   "center",
                   }}
                 >
-                  â†—
+                  ↗
                 </a>
               </div>
             </div>
@@ -298,7 +298,7 @@ function StreamList({ streams, sablier, toast }: {
   )
 }
 
-// â”€â”€ CREATE STREAM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CREATE STREAM ─────────────────────────────────────────────
 function CreateStream({ sablier, balance, toast, onSuccess }: {
   sablier:   ReturnType<typeof useSablier>
   balance:   ReturnType<typeof useArcBalance>
@@ -452,7 +452,7 @@ function CreateStream({ sablier, balance, toast, onSuccess }: {
         <div>
           <p style={{ fontSize: "13px", color: "var(--text)", fontWeight: "500" }}>Cancelable</p>
           <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-dim)" }}>
-            Stream à¤•à¥‹ à¤¬à¤¾à¤¦ à¤®à¥‡à¤‚ cancel à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆà¤‚
+            Stream को बाद में cancel कर सकते हैं
           </p>
         </div>
         <button
@@ -490,13 +490,13 @@ function CreateStream({ sablier, balance, toast, onSuccess }: {
           fontFamily:    "var(--font-sans)", transition: "all 0.15s",
         }}
       >
-        Create Stream â†’
+        Create Stream →
       </button>
     </div>
   )
 }
 
-// â”€â”€ STREAMSPLIT â€” BULK PAYROLL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── STREAMSPLIT — BULK PAYROLL ────────────────────────────────
 function StreamSplit({ sablier, balance, toast, onSuccess }: {
   sablier:   ReturnType<typeof useSablier>
   balance:   ReturnType<typeof useArcBalance>
@@ -532,7 +532,7 @@ function StreamSplit({ sablier, balance, toast, onSuccess }: {
       },
       error: () => {
         setParsing(false)
-        toast.error("CSV Error", "File format check à¤•à¤°à¥‡à¤‚à¥¤")
+        toast.error("CSV Error", "File format check करें।")
       }
     })
   }
@@ -554,10 +554,10 @@ function StreamSplit({ sablier, balance, toast, onSuccess }: {
       }}>
         <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--cyan)",
                     fontWeight: "600", marginBottom: "4px" }}>
-          StreamSplitâ„¢ â€” Bulk Payroll
+          StreamSplit™ — Bulk Payroll
         </p>
         <p style={{ fontSize: "12px", color: "var(--text-dim)", lineHeight: 1.5 }}>
-          CSV upload à¤•à¤°à¥‡à¤‚ â†’ à¤à¤• à¤¸à¤¾à¤¥ à¤•à¤ˆ streams create à¤•à¤°à¥‡à¤‚à¥¤<br />
+          CSV upload करें → एक साथ कई streams create करें।<br />
           CSV format: address, amount, days (headers required)
         </p>
       </div>
@@ -579,7 +579,7 @@ function StreamSplit({ sablier, balance, toast, onSuccess }: {
           marginBottom: "16px",
         }}
       >
-        â†“ CSV Template Download à¤•à¤°à¥‡à¤‚
+        ↓ CSV Template Download करें
       </button>
 
       {/* Default duration */}
@@ -625,7 +625,7 @@ function StreamSplit({ sablier, balance, toast, onSuccess }: {
         onMouseEnter={e => e.currentTarget.style.borderColor = "var(--cyan-dim)"}
         onMouseLeave={e => e.currentTarget.style.borderColor = "var(--border)"}
       >
-        {parsing ? "Parsing CSV..." : "ðŸ“‹ CSV File Select à¤•à¤°à¥‡à¤‚"}
+        {parsing ? "Parsing CSV..." : "📋 CSV File Select करें"}
       </button>
 
       {/* Preview table */}
@@ -653,7 +653,7 @@ function StreamSplit({ sablier, balance, toast, onSuccess }: {
               <span style={{ color: "var(--text-dim)" }}>
                 {r.name || `${r.address.slice(0,6)}...`}
               </span>
-              <span style={{ color: "var(--cyan)" }}>{r.amountUSDC} USDC Â· {r.durationDays}d</span>
+              <span style={{ color: "var(--cyan)" }}>{r.amountUSDC} USDC · {r.durationDays}d</span>
             </div>
           ))}
           {recipients.length > 5 && (
@@ -679,14 +679,14 @@ function StreamSplit({ sablier, balance, toast, onSuccess }: {
         }}
       >
         {recipients.length > 0
-          ? `Create ${recipients.length} Streams â†’`
-          : "CSV Upload à¤•à¤°à¥‡à¤‚ à¤ªà¤¹à¤²à¥‡"}
+          ? `Create ${recipients.length} Streams →`
+          : "CSV Upload करें पहले"}
       </button>
     </div>
   )
 }
 
-// â”€â”€ DEMO DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── DEMO DATA ─────────────────────────────────────────────────
 const now = Math.floor(Date.now() / 1000)
 const DEMO_STREAMS: Stream[] = [
   {

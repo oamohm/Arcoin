@@ -1,15 +1,15 @@
 "use client"
 /**
- * ARCOIN â€” useEscrow.ts
+ * ARCOIN — useEscrow.ts
  * ArcoinEscrow contract interactions.
  *
  * Operations:
- *   createEscrow   â€” lock funds, set recipient + deadline
- *   release        â€” sender confirms delivery
- *   refund         â€” sender reclaims after deadline
- *   raiseDispute   â€” either party escalates
- *   resolveDispute â€” arbiter splits funds
- *   getUserEscrows â€” read all escrows for wallet
+ *   createEscrow   — lock funds, set recipient + deadline
+ *   release        — sender confirms delivery
+ *   refund         — sender reclaims after deadline
+ *   raiseDispute   — either party escalates
+ *   resolveDispute — arbiter splits funds
+ *   getUserEscrows — read all escrows for wallet
  */
 
 import { useState, useCallback }          from "react"
@@ -22,7 +22,7 @@ import { parseError }                        from "@/lib/errors"
 import { requireCleanAddress }               from "@/lib/compliance"
 import type { TxState }                      from "@/types"
 
-// â”€â”€ ESCROW ABI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── ESCROW ABI ────────────────────────────────────────────────
 const ESCROW_ABI = [
   {
     name: "createEscrow",
@@ -102,10 +102,10 @@ const APPROVE_ABI = [
   },
 ] as const
 
-// â”€â”€ STATUS MAP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── STATUS MAP ────────────────────────────────────────────────
 const STATUS_LABELS = ["Active", "Released", "Refunded", "Disputed", "Resolved"] as const
 
-// â”€â”€ TYPES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── TYPES ─────────────────────────────────────────────────────
 export interface EscrowData {
   id:              bigint
   sender:          `0x${string}`
@@ -132,7 +132,7 @@ export interface CreateEscrowParams {
   description:  string
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 export function useEscrow() {
   const { user }           = usePrivy()
   const publicClient       = usePublicClient()
@@ -147,19 +147,19 @@ export function useEscrow() {
   const walletAddress = user?.wallet?.address as `0x${string}` | undefined
   const escrowAddr    = ARCOIN_CONTRACTS.Escrow
 
-  // â”€â”€ GUARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── GUARD ─────────────────────────────────────────────────
   const guardContract = () => {
     if (!escrowAddr) {
       setTxState({ status: "failed", error: {
         code: "contract_not_deployed",
-        message: "Escrow contract à¤…à¤­à¥€ deploy à¤¨à¤¹à¥€à¤‚ à¤¹à¥à¤†à¥¤ Deploy à¤•à¤°à¥‡à¤‚ à¤ªà¤¹à¤²à¥‡à¥¤",
+        message: "Escrow contract अभी deploy नहीं हुआ। Deploy करें पहले।",
       }})
       return false
     }
     return true
   }
 
-  // â”€â”€ CREATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── CREATE ────────────────────────────────────────────────
   const createEscrow = useCallback(async (p: CreateEscrowParams): Promise<bigint | null> => {
     if (!walletAddress || !publicClient || !guardContract()) return null
 
@@ -209,7 +209,7 @@ export function useEscrow() {
     }
   }, [walletAddress, publicClient, writeContractAsync, escrowAddr])
 
-  // â”€â”€ RELEASE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── RELEASE ───────────────────────────────────────────────
   const release = useCallback(async (escrowId: bigint) => {
     if (!walletAddress || !publicClient || !guardContract()) return
     try {
@@ -224,7 +224,7 @@ export function useEscrow() {
     }
   }, [walletAddress, publicClient, writeContractAsync, escrowAddr])
 
-  // â”€â”€ REFUND â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── REFUND ────────────────────────────────────────────────
   const refund = useCallback(async (escrowId: bigint) => {
     if (!walletAddress || !publicClient || !guardContract()) return
     try {
@@ -239,7 +239,7 @@ export function useEscrow() {
     }
   }, [walletAddress, publicClient, writeContractAsync, escrowAddr])
 
-  // â”€â”€ DISPUTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── DISPUTE ───────────────────────────────────────────────
   const raiseDispute = useCallback(async (escrowId: bigint, reason: string) => {
     if (!walletAddress || !publicClient || !guardContract()) return
     try {
@@ -253,7 +253,7 @@ export function useEscrow() {
     }
   }, [walletAddress, publicClient, writeContractAsync, escrowAddr])
 
-  // â”€â”€ FETCH USER ESCROWS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── FETCH USER ESCROWS ────────────────────────────────────
   const fetchUserEscrows = useCallback(async () => {
     if (!walletAddress || !publicClient || !escrowAddr) return
     setIsLoading(true)

@@ -1,16 +1,16 @@
 "use client"
 /**
- * ARCOIN â€” useArcID.ts
+ * ARCOIN — useArcID.ts
  * ArcID human-readable payment identity hook.
  *
  * Operations:
- *   resolve(name)       â€” "alice" â†’ 0xAbCd...
- *   reverseLookup(addr) â€” 0xAbCd... â†’ "alice"
- *   checkAvailable(name)â€” is "alice" available?
- *   register(name,yrs)  â€” register an ArcID (1 USDC/year)
- *   release(name)       â€” release owned ArcID
+ *   resolve(name)       — "alice" → 0xAbCd...
+ *   reverseLookup(addr) — 0xAbCd... → "alice"
+ *   checkAvailable(name)— is "alice" available?
+ *   register(name,yrs)  — register an ArcID (1 USDC/year)
+ *   release(name)       — release owned ArcID
  *
- * Fallback: if Registry not deployed â†’ returns null gracefully.
+ * Fallback: if Registry not deployed → returns null gracefully.
  * Cache: resolved names cached in sessionStorage (5 min TTL).
  */
 
@@ -22,7 +22,7 @@ import { parseUSDC }                      from "@/lib/usdc"
 import { parseError }                     from "@/lib/errors"
 import type { ArcID, TxState }            from "@/types"
 
-// â”€â”€ REGISTRY ABI (read + write subset) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── REGISTRY ABI (read + write subset) ───────────────────────
 const REGISTRY_ABI = [
   {
     name: "resolve",
@@ -81,7 +81,7 @@ const APPROVE_ABI = [
   },
 ] as const
 
-// â”€â”€ CACHE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── CACHE ─────────────────────────────────────────────────────
 const CACHE_TTL   = 5 * 60 * 1000   // 5 minutes
 const cacheGet    = (key: string) => {
   try {
@@ -97,7 +97,7 @@ const cacheSet = (key: string, value: unknown) => {
   catch { /* storage unavailable */ }
 }
 
-// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─────────────────────────────────────────────────────────────
 interface UseArcID {
   // Read
   resolve:        (name: string) => Promise<`0x${string}` | null>
@@ -130,10 +130,10 @@ export function useArcID(): UseArcID {
   const walletAddress = user?.wallet?.address as `0x${string}` | undefined
   const registryAddr  = ARCOIN_CONTRACTS.Registry
 
-  // â”€â”€ REGISTRY DEPLOYED CHECK â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── REGISTRY DEPLOYED CHECK ───────────────────────────────
   const registryReady = !!registryAddr && registryAddr !== ""
 
-  // â”€â”€ RESOLVE: name â†’ address â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── RESOLVE: name → address ───────────────────────────────
   const resolve = useCallback(async (
     name: string
   ): Promise<`0x${string}` | null> => {
@@ -162,7 +162,7 @@ export function useArcID(): UseArcID {
     }
   }, [publicClient, registryReady, registryAddr])
 
-  // â”€â”€ REVERSE LOOKUP: address â†’ name â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── REVERSE LOOKUP: address → name ───────────────────────
   const reverseLookup = useCallback(async (
     address: `0x${string}`
   ): Promise<string | null> => {
@@ -192,7 +192,7 @@ export function useArcID(): UseArcID {
     }
   }, [publicClient, registryReady, registryAddr, walletAddress])
 
-  // â”€â”€ CHECK AVAILABLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── CHECK AVAILABLE ───────────────────────────────────────
   const checkAvailable = useCallback(async (name: string): Promise<boolean> => {
     if (!publicClient || !registryReady) return false
 
@@ -209,7 +209,7 @@ export function useArcID(): UseArcID {
     }
   }, [publicClient, registryReady, registryAddr])
 
-  // â”€â”€ GET INFO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── GET INFO ──────────────────────────────────────────────
   const getInfo = useCallback(async (name: string) => {
     if (!publicClient || !registryReady) return null
 
@@ -228,19 +228,19 @@ export function useArcID(): UseArcID {
     }
   }, [publicClient, registryReady, registryAddr])
 
-  // â”€â”€ REGISTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── REGISTER ──────────────────────────────────────────────
   const register = useCallback(async (name: string, years = 1) => {
     if (!walletAddress || !publicClient || !registryReady) {
       setTxState({ status: "failed",
         error: { code: "contract_not_deployed",
-                 message: "ArcID Registry à¤…à¤­à¥€ deploy à¤¨à¤¹à¥€à¤‚ à¤¹à¥à¤†à¥¤" } })
+                 message: "ArcID Registry अभी deploy नहीं हुआ।" } })
       return
     }
 
     const normalized = name.toLowerCase().replace(/\.arc$/, "")
 
     try {
-      // Step 1: Approve USDC (1 USDC Ã— years)
+      // Step 1: Approve USDC (1 USDC × years)
       setTxState({ status: "signing" })
       const fee         = parseUSDC(String(years))   // 1.000000 USDC per year
       const approveTx   = await writeContractAsync({
@@ -284,7 +284,7 @@ export function useArcID(): UseArcID {
     }
   }, [walletAddress, publicClient, registryReady, registryAddr, writeContractAsync])
 
-  // â”€â”€ RELEASE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── RELEASE ───────────────────────────────────────────────
   const release = useCallback(async (name: string) => {
     if (!walletAddress || !publicClient || !registryReady) return
 
@@ -306,7 +306,7 @@ export function useArcID(): UseArcID {
     }
   }, [walletAddress, publicClient, registryReady, registryAddr, writeContractAsync])
 
-  // â”€â”€ RENEW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── RENEW ─────────────────────────────────────────────────
   const renew = useCallback(async (name: string, years = 1) => {
     if (!walletAddress || !publicClient || !registryReady) return
 
@@ -336,7 +336,7 @@ export function useArcID(): UseArcID {
     }
   }, [walletAddress, publicClient, registryReady, registryAddr, writeContractAsync])
 
-  // â”€â”€ UNIVERSAL RECIPIENT RESOLVER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── UNIVERSAL RECIPIENT RESOLVER ──────────────────────────
   // Handles both raw 0x address AND "alice.arc" / "alice" handles
   const resolveRecipient = useCallback(async (
     input: string

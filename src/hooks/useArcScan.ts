@@ -1,8 +1,8 @@
 "use client"
 /**
- * ARCOIN â€” useArcScan.ts
+ * ARCOIN — useArcScan.ts
  * Fetches transaction history from Blockscout API.
- * Transforms raw API data â†’ typed ArcTransaction objects.
+ * Transforms raw API data → typed ArcTransaction objects.
  *
  * Fallback: if API fails, returns cached data from sessionStorage.
  */
@@ -50,7 +50,7 @@ export function useArcScan(): UseArcScan {
     setError(false)
 
     try {
-      // Blockscout V2 API â€” token transfers for USDC
+      // Blockscout V2 API — token transfers for USDC
       const url = `${BLOCKSCOUT_API}/addresses/${walletAddress}/token-transfers` +
                   `?token=${TOKENS.USDC.address}&limit=${limit}&type=ERC-20`
 

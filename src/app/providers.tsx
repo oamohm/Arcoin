@@ -1,8 +1,8 @@
 "use client"
 /**
- * ARCOIN â€” providers.tsx
+ * ARCOIN — providers.tsx
  * Root provider tree. Wraps entire app.
- * Order matters: Privy â†’ QueryClient â†’ WagmiProvider
+ * Order matters: Privy → QueryClient → WagmiProvider
  */
 
 import { PrivyProvider }                     from "@privy-io/react-auth"
@@ -20,7 +20,7 @@ const wagmiConfig = createConfig({
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime:    12_000,   // 12s â€” matches balance refresh interval
+      staleTime:    12_000,   // 12s — matches balance refresh interval
       gcTime:       60_000,
       retry:        2,
       retryDelay:   (n) => Math.min(1000 * 2 ** n, 10_000),
@@ -36,9 +36,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         loginMethods: ["email", "wallet"],
         appearance: {
           theme:       "dark",
-          accentColor: "#22D3EE",   // Arc cyan â€” terminal aesthetic
+          accentColor: "#22D3EE",   // Arc cyan — terminal aesthetic
           logo:        "/logo.svg",
-          landingHeader: "Arcoin â€” Arc Network",
+          landingHeader: "Arcoin — Arc Network",
           loginMessage:  "Connect to start transacting on Arc",
         },
         defaultChain:     arcTestnet,

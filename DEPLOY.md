@@ -1,16 +1,16 @@
-# ARCOIN â€” Deployment Guide
+# ARCOIN — Deployment Guide
 
-## Prerequisites (à¤à¤• à¤¬à¤¾à¤° setup à¤•à¤°à¥‡à¤‚)
+## Prerequisites (एक बार setup करें)
 
 ```bash
-# 1. Node.js 18+ à¤”à¤° npm confirm à¤•à¤°à¥‡à¤‚
+# 1. Node.js 18+ और npm confirm करें
 node --version   # v18+
 npm --version    # 9+
 
-# 2. Project install à¤•à¤°à¥‡à¤‚
+# 2. Project install करें
 npm install
 
-# 3. Hardhat install à¤•à¤°à¥‡à¤‚ (contracts à¤•à¥‡ à¤²à¤¿à¤)
+# 3. Hardhat install करें (contracts के लिए)
 npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox
 npm install @openzeppelin/contracts
 ```
@@ -20,38 +20,38 @@ npm install @openzeppelin/contracts
 ## Step 1: Environment Setup
 
 ```bash
-# .env.local à¤¬à¤¨à¤¾à¤à¤‚
+# .env.local बनाएं
 cp .env.example .env.local
 ```
 
-`.env.local` à¤®à¥‡à¤‚ à¤¯à¤¹ fill à¤•à¤°à¥‡à¤‚:
+`.env.local` में यह fill करें:
 ```env
-# Privy Dashboard à¤¸à¥‡: https://dashboard.privy.io
+# Privy Dashboard से: https://dashboard.privy.io
 NEXT_PUBLIC_PRIVY_APP_ID=clxxxxxxxxxxxxxxxxx
 
-# Arc Testnet wallet à¤•à¥€ private key
-# âš ï¸ TESTNET ONLY â€” à¤•à¤­à¥€ mainnet key à¤¯à¤¹à¤¾à¤ à¤®à¤¤ à¤¡à¤¾à¤²à¥‡à¤‚
+# Arc Testnet wallet की private key
+# ⚠ ️ TESTNET ONLY — कभी mainnet key यहाँ मत डालें
 DEPLOYER_PRIVATE_KEY=0xabc123...
 
-# Treasury à¤•à¥‡ à¤²à¤¿à¤ multisig address (testnet à¤ªà¤° deployer address à¤ à¥€à¤• à¤¹à¥ˆ)
+# Treasury के लिए multisig address (testnet पर deployer address à¤ ीक है)
 TREASURY_MULTISIG=0xYourWalletAddress
 DEV_FUND=0xYourWalletAddress
 LIQUIDITY_RESERVE=0xYourWalletAddress
 COMMUNITY_MULTISIG=0xYourWalletAddress
 
-# Claude API (AI Help feature à¤•à¥‡ à¤²à¤¿à¤)
+# Claude API (AI Help feature के लिए)
 ANTHROPIC_API_KEY=sk-ant-xxxxx
 ```
 
 ---
 
-## Step 2: Get Testnet USDC (Gas à¤•à¥‡ à¤²à¤¿à¤)
+## Step 2: Get Testnet USDC (Gas के लिए)
 
 ```
-1. https://faucet.circle.com à¤–à¥‹à¤²à¥‡à¤‚
-2. Arc Testnet select à¤•à¤°à¥‡à¤‚
-3. Deployer wallet address paste à¤•à¤°à¥‡à¤‚
-4. 10 USDC receive à¤•à¤°à¥‡à¤‚
+1. https://faucet.circle.com खोलें
+2. Arc Testnet select करें
+3. Deployer wallet address paste करें
+4. 10 USDC receive करें
 ```
 
 ---
@@ -59,34 +59,34 @@ ANTHROPIC_API_KEY=sk-ant-xxxxx
 ## Step 3: Deploy Smart Contracts
 
 ```bash
-# à¤¸à¤­à¥€ 5 contracts à¤à¤• command à¤¸à¥‡ deploy à¤¹à¥‹à¤‚à¤—à¥‡:
+# सभी 5 contracts एक command से deploy होंगे:
 npx hardhat run contracts/scripts/deploy-all.ts --network arc-testnet
 ```
 
 **Expected output:**
 ```
-â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
-â•‘      ARCOIN â€” FULL CONTRACT DEPLOYMENT           â•‘
-â• â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•£
-â•‘  Network:    Arc Testnet (5042002)               â•‘
-â•‘  Deployer:   0xAbCd...                           â•‘
-â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+╔══════════════════════════════════════════════════╗
+║      ARCOIN — FULL CONTRACT DEPLOYMENT           ║
+╠ ══════════════════════════════════════════════════╣
+║  Network:    Arc Testnet (5042002)               ║
+║  Deployer:   0xAbCd...                           ║
+╚══════════════════════════════════════════════════╝
 
-â–º [1/5] Deploying ArcoinRegistry (ArcID)...
-  âœ“ Registry:      0x...
+► [1/5] Deploying ArcoinRegistry (ArcID)...
+  ✓ Registry:      0x...
 
-â–º [2/5] Deploying ArcoinTreasury...
-  âœ“ Treasury:      0x...
+► [2/5] Deploying ArcoinTreasury...
+  ✓ Treasury:      0x...
 
-â–º [3/5] Deploying ArcoinPaymentRouter...
-  âœ“ PaymentRouter: 0x...
+► [3/5] Deploying ArcoinPaymentRouter...
+  ✓ PaymentRouter: 0x...
 
-â–º [4/5] Configuring Treasury â†’ approve PaymentRouter...
-  âœ“ PaymentRouter approved as fee collector
+► [4/5] Configuring Treasury → approve PaymentRouter...
+  ✓ PaymentRouter approved as fee collector
 
-â–º [5/5] Deploying Sablier V2...
-  âœ“ LockupLinear:  0x...
-  âœ“ LockupDynamic: 0x...
+► [5/5] Deploying Sablier V2...
+  ✓ LockupLinear:  0x...
+  ✓ LockupDynamic: 0x...
 
 Saved to: contracts/deployments/arc-testnet.json
 ```
@@ -96,7 +96,7 @@ Saved to: contracts/deployments/arc-testnet.json
 ## Step 4: Auto-patch constants.ts
 
 ```bash
-# Deployment addresses à¤•à¥‹ constants.ts à¤®à¥‡à¤‚ auto-inject à¤•à¤°à¥‡à¤‚
+# Deployment addresses को constants.ts में auto-inject करें
 npx ts-node contracts/scripts/post-deploy-patch.ts
 ```
 
@@ -105,17 +105,17 @@ npx ts-node contracts/scripts/post-deploy-patch.ts
 ## Step 5: Verify Contracts on Blockscout
 
 ```bash
-# Registry verify à¤•à¤°à¥‡à¤‚
+# Registry verify करें
 npx hardhat verify --network arc-testnet <REGISTRY_ADDR> \
   "0x3600000000000000000000000000000000000000" \
   "<DEPLOYER_ADDR>" "<DEPLOYER_ADDR>"
 
-# Treasury verify à¤•à¤°à¥‡à¤‚
+# Treasury verify करें
 npx hardhat verify --network arc-testnet <TREASURY_ADDR> \
   "0x3600000000000000000000000000000000000000" \
   "<DEPLOYER_ADDR>" "<DEPLOYER_ADDR>" "<DEPLOYER_ADDR>" "<DEPLOYER_ADDR>"
 
-# PaymentRouter verify à¤•à¤°à¥‡à¤‚
+# PaymentRouter verify करें
 npx hardhat verify --network arc-testnet <ROUTER_ADDR> \
   "0x3600000000000000000000000000000000000000" \
   "<TREASURY_ADDR>" "<DEPLOYER_ADDR>"
@@ -127,19 +127,19 @@ npx hardhat verify --network arc-testnet <ROUTER_ADDR> \
 
 ```bash
 npm run dev
-# http://localhost:3000 à¤–à¥‹à¤²à¥‡à¤‚
+# http://localhost:3000 खोलें
 ```
 
 Test checklist:
 ```
-â˜ MetaMask â†’ Arc Testnet (5042002) â†’ Connect
-â˜ Balance display (faucet.circle.com à¤¸à¥‡ USDC à¤²à¥‡à¤‚)
-â˜ Send 1 USDC to another address
-â˜ Blockscout link à¤•à¤¾à¤® à¤•à¤° à¤°à¤¹à¤¾ à¤¹à¥ˆ
-â˜ ArcID register (alice.arc)
-â˜ Stream create à¤•à¤°à¥‡à¤‚ (5 USDC, 7 days)
-â˜ Audit CSV export
-â˜ AI Help à¤®à¥‡à¤‚ à¤¸à¤µà¤¾à¤² à¤ªà¥‚à¤›à¥‡à¤‚
+☐ MetaMask → Arc Testnet (5042002) → Connect
+☐ Balance display (faucet.circle.com से USDC लें)
+☐ Send 1 USDC to another address
+☐ Blockscout link काम कर रहा है
+☐ ArcID register (alice.arc)
+☐ Stream create करें (5 USDC, 7 days)
+☐ Audit CSV export
+☐ AI Help में सवाल पूछें
 ```
 
 ---
@@ -147,21 +147,21 @@ Test checklist:
 ## Step 7: GitHub Push
 
 ```bash
-# Repo init (à¤…à¤—à¤° à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ)
+# Repo init (अगर नहीं है)
 git init
 git add .
 git commit -m "feat: Arcoin Phase 1+2 complete"
 git branch -M main
 
-# GitHub à¤ªà¤° repo à¤¬à¤¨à¤¾à¤à¤‚, à¤«à¤¿à¤°:
+# GitHub पर repo बनाएं, फिर:
 git remote add origin https://github.com/YOUR_USERNAME/arcoin.git
 git push -u origin main
 ```
 
-**âš ï¸ .gitignore confirm à¤•à¤°à¥‡à¤‚:**
+**⚠ ️ .gitignore confirm करें:**
 ```bash
 cat .gitignore | grep "env.local"
-# Output: .env.local â† à¤¯à¤¹ line à¤¹à¥‹à¤¨à¥€ à¤šà¤¾à¤¹à¤¿à¤
+# Output: .env.local ← यह line होनी चाहिए
 ```
 
 ---
@@ -176,18 +176,18 @@ vercel --prod
 # Option B: Vercel Dashboard
 # 1. https://vercel.com/new
 # 2. Import GitHub repo
-# 3. Environment Variables add à¤•à¤°à¥‡à¤‚:
+# 3. Environment Variables add करें:
 #    NEXT_PUBLIC_PRIVY_APP_ID = clxxxxxxx
 #    ANTHROPIC_API_KEY        = sk-ant-xxxxx
 # 4. Deploy
 ```
 
-**Vercel Environment Variables (Dashboard à¤®à¥‡à¤‚):**
+**Vercel Environment Variables (Dashboard में):**
 ```
-NEXT_PUBLIC_PRIVY_APP_ID      â†’ Privy Dashboard à¤¸à¥‡
-ANTHROPIC_API_KEY              â†’ console.anthropic.com à¤¸à¥‡
-NEXT_PUBLIC_APP_URL            â†’ https://arcoin.vercel.app
-NEXT_PUBLIC_APP_ENV            â†’ production
+NEXT_PUBLIC_PRIVY_APP_ID      → Privy Dashboard से
+ANTHROPIC_API_KEY              → console.anthropic.com से
+NEXT_PUBLIC_APP_URL            → https://arcoin.vercel.app
+NEXT_PUBLIC_APP_ENV            → production
 ```
 
 ---
@@ -196,34 +196,34 @@ NEXT_PUBLIC_APP_ENV            â†’ production
 
 ```
 CONTRACTS
-â˜ ArcoinRegistry deployed + verified
-â˜ ArcoinTreasury deployed + verified
-â˜ ArcoinPaymentRouter deployed + verified
-â˜ Sablier LockupLinear deployed
-â˜ Sablier LockupDynamic deployed
-â˜ constants.ts patched (post-deploy-patch.ts)
+☐ ArcoinRegistry deployed + verified
+☐ ArcoinTreasury deployed + verified
+☐ ArcoinPaymentRouter deployed + verified
+☐ Sablier LockupLinear deployed
+☐ Sablier LockupDynamic deployed
+☐ constants.ts patched (post-deploy-patch.ts)
 
 FRONTEND
-â˜ npm run dev â†’ localhost:3000 à¤•à¤¾à¤® à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆ
-â˜ Wallet connect à¤•à¤¾à¤® à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆ
-â˜ Balance à¤¦à¤¿à¤–à¤¤à¤¾ à¤¹à¥ˆ
-â˜ Send à¤•à¤¾à¤® à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆ + Blockscout link
+☐ npm run dev → localhost:3000 काम करता है
+☐ Wallet connect काम करता है
+☐ Balance दिखता है
+☐ Send काम करता है + Blockscout link
 
 DEPLOY
-â˜ .env.local â†’ .gitignore à¤®à¥‡à¤‚ à¤¹à¥ˆ â† CRITICAL
-â˜ GitHub push complete
-â˜ Vercel env vars set
-â˜ Vercel deploy success
-â˜ Production URL test à¤•à¤¿à¤¯à¤¾
+☐ .env.local → .gitignore में है ← CRITICAL
+☐ GitHub push complete
+☐ Vercel env vars set
+☐ Vercel deploy success
+☐ Production URL test किया
 
 POST-DEPLOY
-â˜ ArcoinEscrow deploy à¤•à¤°à¥‡à¤‚ (Phase 3 à¤•à¥‡ à¤²à¤¿à¤)
-â˜ Ownership to multisig transfer à¤•à¤°à¥‡à¤‚
+☐ ArcoinEscrow deploy करें (Phase 3 के लिए)
+☐ Ownership to multisig transfer करें
 ```
 
 ---
 
-## Addresses Reference (fill à¤•à¤°à¥‡à¤‚ after deploy)
+## Addresses Reference (fill करें after deploy)
 
 ```
 Arc Testnet (5042002)

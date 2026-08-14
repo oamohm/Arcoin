@@ -1,6 +1,6 @@
 "use client"
 /**
- * ARCOIN â€” useArcBalance.ts
+ * ARCOIN — useArcBalance.ts
  * Live USDC balance with 12s polling and automatic RPC fallback.
  * Single source of truth for all balance displays.
  */
@@ -14,7 +14,7 @@ interface ArcBalance {
   raw:           bigint | undefined
   display:       string          // "1,240.50 USDC"
   displayShort:  string          // "1.24K USDC" for compact view
-  usd:           string          // "â‰ˆ $1,240.50"
+  usd:           string          // "≈ $1,240.50"
   isLoading:     boolean
   isError:       boolean
   refetch:       () => void
@@ -36,7 +36,7 @@ export function useArcBalance(): ArcBalance {
     token:         TOKENS.USDC.address,
     chainId:       5042002,
     query: {
-      refetchInterval:         12_000,  // 12 seconds â€” not too aggressive on Arc
+      refetchInterval:         12_000,  // 12 seconds — not too aggressive on Arc
       refetchIntervalInBackground: false,
       enabled:                 !!walletAddress,
     },
@@ -46,11 +46,11 @@ export function useArcBalance(): ArcBalance {
 
   return {
     raw,
-    display:      raw !== undefined ? formatUSDC(raw, { decimals: 2 }) : "â€”",
-    displayShort: raw !== undefined ? formatUSDC(raw, { decimals: 2, compact: true }) : "â€”",
+    display:      raw !== undefined ? formatUSDC(raw, { decimals: 2 }) : "—",
+    displayShort: raw !== undefined ? formatUSDC(raw, { decimals: 2, compact: true }) : "—",
     usd:          raw !== undefined
-                    ? `â‰ˆ $${formatUSDC(raw, { decimals: 2, showSymbol: false })}`
-                    : "â€”",
+                    ? `≈ $${formatUSDC(raw, { decimals: 2, showSymbol: false })}`
+                    : "—",
     isLoading,
     isError,
     refetch,

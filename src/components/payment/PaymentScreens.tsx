@@ -1,8 +1,8 @@
 "use client"
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// ARCOIN â€” Payment + Audit Screens
-// SendScreen Â· ReceiveScreen Â· AuditScreen
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════════
+// ARCOIN — Payment + Audit Screens
+// SendScreen · ReceiveScreen · AuditScreen
+// ═══════════════════════════════════════════════════════════
 
 import { useState, useCallback }  from "react"
 import { usePrivy }                from "@privy-io/react-auth"
@@ -19,7 +19,7 @@ import { EXPLORER }                from "@/lib/constants"
 import { useI18n }                 from "@/lib/i18n"
 import type { TxState }            from "@/types"
 
-// â”€â”€ SHARED HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── SHARED HEADER ────────────────────────────────────────
 function ScreenHeader({ title, onBack }: { title: string; onBack: () => void }) {
   return (
     <div style={{
@@ -31,7 +31,7 @@ function ScreenHeader({ title, onBack }: { title: string; onBack: () => void }) 
       <button onClick={onBack} style={{
         background: "none", border: "none", color: "var(--text-dim)",
         fontSize: "20px", cursor: "pointer", lineHeight: 1, padding: "0 4px",
-      }}>â†</button>
+      }}>←</button>
       <span style={{
         fontFamily: "var(--font-mono)", fontSize: "13px", letterSpacing: "0.1em",
         color: "var(--text)", textTransform: "uppercase", fontWeight: "600",
@@ -40,9 +40,9 @@ function ScreenHeader({ title, onBack }: { title: string; onBack: () => void }) 
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════════
 // SEND SCREEN
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════════
 export function SendScreen({
   onNavigate,
   onTxState,
@@ -231,9 +231,9 @@ export function SendScreen({
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════════
 // RECEIVE SCREEN
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════════
 export function ReceiveScreen({ onNavigate }: { onNavigate: (s: string) => void }) {
   const { user }  = usePrivy()
   const toast     = useToast()
@@ -244,7 +244,7 @@ export function ReceiveScreen({ onNavigate }: { onNavigate: (s: string) => void 
     if (!address) return
     await navigator.clipboard.writeText(address)
     setCopied(true)
-    toast.info("Address Copied", "Clipboard à¤®à¥‡à¤‚ copy à¤¹à¥‹ à¤—à¤¯à¤¾à¥¤")
+    toast.info("Address Copied", "Clipboard में copy हो गया।")
     setTimeout(() => setCopied(false), 2000)
   }
 
@@ -292,7 +292,7 @@ export function ReceiveScreen({ onNavigate }: { onNavigate: (s: string) => void 
             marginBottom: "12px",
           }}
         >
-          {copied ? "âœ“ Copied!" : "Copy Address"}
+          {copied ? "✓ Copied!" : "Copy Address"}
         </button>
 
         <a
@@ -304,7 +304,7 @@ export function ReceiveScreen({ onNavigate }: { onNavigate: (s: string) => void 
             color: "var(--cyan)", textDecoration: "none",
           }}
         >
-          Blockscout à¤ªà¤° à¤¦à¥‡à¤–à¥‡à¤‚ â†—
+          Blockscout पर देखें ↗
         </a>
 
         <div style={{
@@ -316,8 +316,8 @@ export function ReceiveScreen({ onNavigate }: { onNavigate: (s: string) => void 
             Network Info
           </p>
           <p style={{ fontSize: "12px", color: "var(--text-dim)", lineHeight: 1.6 }}>
-            à¤•à¥‡à¤µà¤² <span style={{ color: "var(--cyan)" }}>Arc Testnet (Chain 5042002)</span> à¤¸à¥‡ USDC à¤­à¥‡à¤œà¥‡à¤‚à¥¤
-            à¤…à¤¨à¥à¤¯ network à¤¸à¥‡ à¤­à¥‡à¤œà¤¨à¥‡ à¤ªà¤° funds à¤–à¥‹ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆà¤‚à¥¤
+            केवल <span style={{ color: "var(--cyan)" }}>Arc Testnet (Chain 5042002)</span> से USDC भेजें।
+            अन्य network से भेजने पर funds खो सकते हैं।
           </p>
         </div>
       </div>
@@ -325,9 +325,9 @@ export function ReceiveScreen({ onNavigate }: { onNavigate: (s: string) => void 
   )
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════════
 // AUDIT SCREEN
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ══════════════════════════════════════════════════════════
 export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void }) {
   const arcScan   = useArcScan()
   const toast     = useToast()
@@ -365,7 +365,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <button onClick={() => onNavigate("dashboard")} style={{
             background: "none", border: "none", color: "var(--text-dim)", fontSize: "20px", cursor: "pointer",
-          }}>â†</button>
+          }}>←</button>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: "13px", letterSpacing: "0.1em",
                          color: "var(--text)", textTransform: "uppercase", fontWeight: "600" }}>Audit</span>
         </div>
@@ -378,7 +378,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
             fontFamily: "var(--font-mono)",
           }}
         >
-          {private_ ? "ðŸ”’ Private" : "ðŸ”“ Public"}
+          {private_ ? "🔒 Private" : "🔓 Public"}
         </button>
       </div>
 
@@ -391,7 +391,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
             borderRadius: "var(--radius)", padding: "12px 14px", marginBottom: "16px",
             display: "flex", alignItems: "flex-start", gap: "10px",
           }}>
-            <span style={{ fontSize: "16px" }}>ðŸ”’</span>
+            <span style={{ fontSize: "16px" }}>🔒</span>
             <div>
               <p style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--cyan)",
                           fontWeight: "600", marginBottom: "2px" }}>Confidential Mode Active</p>
@@ -402,7 +402,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
           </div>
         )}
 
-        {/* 30-day summary â€” live from Blockscout data */}
+        {/* 30-day summary — live from Blockscout data */}
         {(() => {
           const cutoff = Math.floor(Date.now() / 1000) - 30 * 86400
           const recent = arcScan.transactions.filter(t => t.timestamp >= cutoff)
@@ -417,7 +417,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
                 <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", letterSpacing: "0.12em",
                                color: "var(--text-dim)", textTransform: "uppercase" }}>
                   30-Day Summary
-                  {arcScan.isLoading && <span style={{ marginLeft: "8px", color: "var(--cyan)" }}>â†»</span>}
+                  {arcScan.isLoading && <span style={{ marginLeft: "8px", color: "var(--cyan)" }}>↻</span>}
                 </span>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}>
@@ -431,7 +431,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
                       {s.label}
                     </p>
                     <p style={{ fontFamily: "var(--font-mono)", fontSize: "22px", fontWeight: "700", color: s.color }}>
-                      {arcScan.isLoading ? "â€”" : s.value}
+                      {arcScan.isLoading ? "—" : s.value}
                     </p>
                     <p style={{ fontFamily: "var(--font-mono)", fontSize: "10px", color: "var(--text-dim)" }}>USDC</p>
                   </div>
@@ -446,14 +446,14 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
           <button
             onClick={async () => {
               if (arcScan.transactions.length === 0) {
-                toast.info("No transactions", "History load à¤¹à¥‹ à¤°à¤¹à¥€ à¤¹à¥ˆ...")
+                toast.info("No transactions", "History load हो रही है...")
                 return
               }
               try {
                 await generateTransactionProof(arcScan.transactions[0])
                 toast.success("Arcoin Proof generated!")
               } catch (e) {
-                toast.error("PDF Error", "Generation failedà¥¤ Retry à¤•à¤°à¥‡à¤‚à¥¤")
+                toast.error("PDF Error", "Generation failed। Retry करें।")
               }
             }}
             style={{
@@ -462,12 +462,12 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
               cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: "12px",
             }}
           >
-            â†“ Arcoin Proof PDF
+            ↓ Arcoin Proof PDF
           </button>
           <button
             onClick={() => {
               if (arcScan.transactions.length === 0) {
-                toast.info("No transactions", "History load à¤¹à¥‹ à¤°à¤¹à¥€ à¤¹à¥ˆ...")
+                toast.info("No transactions", "History load हो रही है...")
                 return
               }
               generateAuditCSV(arcScan.transactions)
@@ -479,7 +479,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
               cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: "12px",
             }}
           >
-            â†“ Export CSV
+            ↓ Export CSV
           </button>
         </div>
 
@@ -490,7 +490,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
             <span style={{ fontFamily: "var(--font-mono)", fontSize: "10px", letterSpacing: "0.12em",
                            color: "var(--text-dim)", textTransform: "uppercase" }}>
               Transaction History
-              {arcScan.isLoading && <span style={{ marginLeft: "8px", color: "var(--cyan)" }}> â†» Loading</span>}
+              {arcScan.isLoading && <span style={{ marginLeft: "8px", color: "var(--cyan)" }}> ↻ Loading</span>}
             </span>
           </div>
           {arcScan.transactions.length === 0 && !arcScan.isLoading && (
@@ -514,7 +514,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: "14px", color: isOut ? "var(--red)" : "var(--green)", flexShrink: 0,
                 }}>
-                  {isOut ? "â†‘" : "â†“"}
+                  {isOut ? "↑" : "↓"}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: "13px", color: "var(--text)", fontWeight: "500" }}>
@@ -527,10 +527,10 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
                 <div style={{ textAlign: "right", flexShrink: 0 }}>
                   <p style={{ fontFamily: "var(--font-mono)", fontSize: "13px", fontWeight: "600",
                               color: isOut ? "var(--red)" : "var(--green)" }}>
-                    {isOut ? "âˆ’" : "+"}{(Number(tx.amountRaw) / 1e6).toFixed(2)}
+                    {isOut ? "−" : "+"}{(Number(tx.amountRaw) / 1e6).toFixed(2)}
                   </p>
                   <span style={{ fontFamily: "var(--font-mono)", fontSize: "9px", color: "var(--cyan)" }}>
-                    â†— Scan
+                    ↗ Scan
                   </span>
                 </div>
               </a>
