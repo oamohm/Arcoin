@@ -352,7 +352,7 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
     a.download = "arcoin-transactions.csv"
     a.click()
     URL.revokeObjectURL(url)
-    toast.success("CSV Exported", "Transaction history downloaded.")
+    toast.success("CSV Exported")
   }
 
   return (
