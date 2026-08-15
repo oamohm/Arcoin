@@ -131,7 +131,11 @@ export function useArcID(): UseArcID {
   const registryAddr  = ARCOIN_CONTRACTS.Registry
 
   // ── REGISTRY DEPLOYED CHECK ───────────────────────────────
-  const registryReady = !!registryAddr && registryAddr !== ""
+  // registryAddr is typed as `0x${string}` (a template literal type), so
+  // comparing it directly against "" trips a TS "no overlap" error even
+  // though the runtime default value really is "". Cast to plain string
+  // for the comparison.
+  const registryReady = !!registryAddr && (registryAddr as string) !== ""
 
   // ── RESOLVE: name → address ───────────────────────────────
   const resolve = useCallback(async (
