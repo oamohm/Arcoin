@@ -30,8 +30,10 @@ export function StreamScreen({ onNavigate }: { onNavigate: (s: string) => void }
   const balance = useArcBalance()
   const toast   = useToast()
 
-  const [view,       setView]      = useState<StreamView>("list")
-  const [mockStreams, setMockStreams] = useState<Stream[]>(DEMO_STREAMS)
+  const [view,    setView]    = useState<StreamView>("list")
+  // Real streams only -- no demo/mock data. Populated from the connected
+  // wallet's actual on-chain streams once Sablier is deployed to Arc.
+  const [streams, setStreams] = useState<Stream[]>([])
 
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -100,7 +102,7 @@ export function StreamScreen({ onNavigate }: { onNavigate: (s: string) => void }
       </div>
 
       {/* Views */}
-      {view === "list"   && <StreamList   streams={mockStreams} sablier={sablier} toast={toast} />}
+      {view === "list"   && <StreamList   streams={streams} sablier={sablier} toast={toast} />}
       {view === "create" && <CreateStream sablier={sablier} balance={balance} toast={toast} onSuccess={() => setView("list")} />}
       {view === "bulk"   && <StreamSplit  sablier={sablier} balance={balance} toast={toast} onSuccess={() => setView("list")} />}
     </div>
@@ -685,34 +687,3 @@ function StreamSplit({ sablier, balance, toast, onSuccess }: {
     </div>
   )
 }
-
-// ── DEMO DATA ─────────────────────────────────────────────────
-const now = Math.floor(Date.now() / 1000)
-const DEMO_STREAMS: Stream[] = [
-  {
-    id:              1n,
-    sender:          "0xAbCd000000000000000000000000000000000001" as `0x${string}`,
-    recipient:       "0xAbCd000000000000000000000000000000000002" as `0x${string}`,
-    totalAmountRaw:  12_000000n,
-    streamedRaw:     8_200000n,
-    startTime:       now - (3 * 86400),
-    endTime:         now + (4 * 86400),
-    cancelable:      true,
-    status:          "active",
-    tokenSymbol:     "USDC",
-    contractAddress: "" as `0x${string}`,
-  },
-  {
-    id:              2n,
-    sender:          "0xAbCd000000000000000000000000000000000001" as `0x${string}`,
-    recipient:       "0xAbCd000000000000000000000000000000000003" as `0x${string}`,
-    totalAmountRaw:  10_000000n,
-    streamedRaw:     3_400000n,
-    startTime:       now - (86400),
-    endTime:         now + (2 * 86400),
-    cancelable:      true,
-    status:          "active",
-    tokenSymbol:     "USDC",
-    contractAddress: "" as `0x${string}`,
-  },
-]
