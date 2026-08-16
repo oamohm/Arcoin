@@ -539,7 +539,7 @@ export function useSablier(): UseSablier {
           args:         [streamId],
         }) as Promise<{
           sender: `0x${string}`, recipient: `0x${string}`,
-          depositedAmount: bigint, startTime: bigint, endTime: bigint,
+          depositedAmount: bigint, startTime: number, endTime: number,
           isCancelable: boolean, wasCanceled: boolean, isDepleted: boolean,
           withdrawnAmount: bigint,
         }>,
@@ -553,7 +553,7 @@ export function useSablier(): UseSablier {
 
       const status = raw.wasCanceled ? "cancelled"
                    : raw.isDepleted  ? "completed"
-                   : raw.startTime > BigInt(Math.floor(Date.now() / 1000)) ? "pending"
+                   : raw.startTime > Math.floor(Date.now() / 1000) ? "pending"
                    : "active"
 
       return {
