@@ -175,8 +175,10 @@ export function useSablier(): UseSablier {
       await requireCleanAddress(params.recipient as `0x${string}`)
 
       const amountRaw    = parseUSDC(params.totalAmount)
-      const cliffSec     = BigInt((params.cliffDays ?? 0) * 86400)
-      const durationSec  = BigInt(params.durationDays * 86400)
+      // Sablier's ABI types cliff/total durations as uint40 (plain number),
+      // not bigint -- keep these as regular numbers.
+      const cliffSec     = (params.cliffDays ?? 0) * 86400
+      const durationSec  = params.durationDays * 86400
 
       // Step 1: Approve Sablier to pull USDC
       setTxState({ status: "signing" })
@@ -410,8 +412,8 @@ export function useSablier(): UseSablier {
               cancelable:   true,
               transferable: false,
               durations: {
-                cliff: 0n,
-                total: BigInt(r.durationDays * 86400),
+                cliff: 0,
+                total: r.durationDays * 86400,
               },
               broker: {
                 account: "0x0000000000000000000000000000000000000000" as `0x${string}`,
