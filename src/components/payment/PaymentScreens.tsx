@@ -4,7 +4,7 @@
 // SendScreen · ReceiveScreen · AuditScreen
 // ═══════════════════════════════════════════════════════════
 
-import { useState, useCallback }  from "react"
+import { useState, useCallback, useEffect }  from "react"
 import { usePrivy }                from "@privy-io/react-auth"
 import { QRCodeSVG as QRCode }     from "qrcode.react"
 import { useSendPayment }          from "@/hooks/useSendPayment"
@@ -69,15 +69,26 @@ export function SendScreen({
     onTxState({ status: "simulating" }, `Sending ${amount} USDC to ${to.slice(0,6)}...`)
 
     await send({ to, amount, note: note || undefined })
+    // NOTE: don't check txState here -- it's a stale closure value from
+    // this render, not the freshly updated state after send() resolves.
+    // The useEffect below watches the live txState and handles the
+    // success/failure toast + navigation instead.
+  }, [to, amount, note, toValid, amountValid, send, onTxState])
 
+  // Fire the success toast and navigate back only once the hook's live
+  // txState actually reaches "success" -- reading it synchronously right
+  // after `await send()` above sees a stale pre-update value and would
+  // silently do nothing, leaving the user unsure whether the send worked.
+  useEffect(() => {
     if (txState.status === "success" && txState.hash) {
       toast.success("Transaction Confirmed!", txState.hash)
-      onTxState({ status: "idle" })
-      onNavigate("dashboard")
-    } else if (txState.status === "failed") {
-      onTxState(txState)
+      const timer = setTimeout(() => {
+        onTxState({ status: "idle" })
+        onNavigate("dashboard")
+      }, 2000)
+      return () => clearTimeout(timer)
     }
-  }, [to, amount, note, toValid, amountValid, send, txState, toast, onNavigate, onTxState])
+  }, [txState.status, txState.hash])
 
   return (
     <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -332,6 +343,16 @@ export function AuditScreen({ onNavigate }: { onNavigate: (s: string) => void })
   const arcScan   = useArcScan()
   const toast     = useToast()
   const [private_, setPrivate] = useState(false)
+
+  // This screen has its own useArcScan() instance, so it must fetch its
+  // own history -- Dashboard's fetch does not populate this one. Also
+  // refresh on an interval so recently sent/received transactions show
+  // up without needing a manual reload.
+  useEffect(() => {
+    arcScan.fetchHistory(10)
+    const interval = setInterval(() => arcScan.fetchHistory(10), 15000)
+    return () => clearInterval(interval)
+  }, [])
 
   const exportCSV = () => {
     // Client-side CSV generation (Confidential mode compliant)

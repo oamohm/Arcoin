@@ -24,9 +24,13 @@ export function Dashboard({ onNavigate }: Props) {
   const arcScan          = useArcScan()
   const { t }            = useI18n()
 
-  // Fetch tx history on mount
+  // Fetch tx history on mount, and re-fetch on an interval so a newly
+  // sent/received transaction (done on another screen) shows up here
+  // without needing a manual reload.
   useEffect(() => {
     arcScan.fetchHistory(10)
+    const interval = setInterval(() => arcScan.fetchHistory(10), 15000)
+    return () => clearInterval(interval)
   }, [])
 
   const address   = user?.wallet?.address ?? ""
