@@ -122,7 +122,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                       marginTop:      "2px",
                     }}
                   >
-                    Blockscout पर देखें ↗
+                    ArcScan पर देखें ↗
                   </a>
                 ) : t.message ? (
                   <p style={{ fontSize: "12px", color: "var(--text-dim)", marginTop: "2px" }}>

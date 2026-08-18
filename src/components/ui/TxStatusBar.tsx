@@ -199,7 +199,7 @@ export function TxStatusBar({ txState, onClose, label }: Props) {
               rel="noopener noreferrer"
               style={{ fontFamily: "var(--font-mono)", fontSize: "11px", color: "var(--cyan)", textDecoration: "none" }}
             >
-              Blockscout ↗
+              ArcScan ↗
             </a>
           </div>
         )}

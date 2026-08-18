@@ -49,7 +49,7 @@ export function WelcomeModal({ onClose }: { onClose: () => void }) {
             { label: "Network",  value: "● Arc Testnet", color: "var(--green)" },
             { label: "Chain ID", value: "5042002" },
             { label: "Gas Token",value: "USDC",          color: "var(--cyan)"  },
-            { label: "Explorer", value: "Blockscout"     },
+            { label: "Explorer", value: "ArcScan"        },
           ].map(row => (
             <div key={row.label} style={{
               display: "flex", justifyContent: "space-between", alignItems: "center",

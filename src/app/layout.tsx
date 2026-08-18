@@ -1,7 +1,17 @@
 import type { Metadata, Viewport } from "next"
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"
-import { Providers } from "./providers"
+import dynamic from "next/dynamic"
 import "./globals.css"
+
+// Privy's PrivyProvider only works in the browser (it's not SSR-safe), so
+// loading it via next/dynamic with ssr:false keeps Next.js from trying to
+// execute it during the build's static page generation -- which was
+// failing with "Cannot initialize the Privy provider with an invalid App
+// ID" because env vars aren't resolved the same way in that build step.
+const Providers = dynamic(
+  () => import("./providers").then(mod => mod.Providers),
+  { ssr: false }
+)
 
 // ── FONTS ─────────────────────────────────────────────────
 const inter = Inter({

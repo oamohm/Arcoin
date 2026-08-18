@@ -315,7 +315,7 @@ export function ReceiveScreen({ onNavigate }: { onNavigate: (s: string) => void 
             color: "var(--cyan)", textDecoration: "none",
           }}
         >
-          Blockscout पर देखें ↗
+          ArcScan पर देखें ↗
         </a>
 
         <div style={{

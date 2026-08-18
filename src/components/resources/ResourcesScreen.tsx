@@ -304,7 +304,7 @@ function LinksTab() {
     { category: "Arc Network",
       items: [
         { label: "Arc Docs",        url: "https://docs.arc.io",                          icon: "📖" },
-        { label: "Blockscout",      url: "https://testnet.arcscan.app",                 icon: "⬡"  },
+        { label: "ArcScan",         url: "https://testnet.arcscan.app",                 icon: "⬡"  },
         { label: "Testnet Faucet",  url: "https://faucet.circle.com",                    icon: "⛽" },
         { label: "Arc Network",     url: "https://arc.network",                          icon: "◈"  },
       ]
