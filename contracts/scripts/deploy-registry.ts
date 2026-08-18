@@ -54,7 +54,7 @@ async function main() {
   console.log(`\n  ✓ ArcoinRegistry deployed`)
   console.log(`    Address:     ${registryAddress}`)
   console.log(`    Tx:          ${registry.deploymentTransaction()?.hash}`)
-  console.log(`    Explorer:    https://atlas.blockscout.com/address/${registryAddress}`)
+  console.log(`    Explorer:    https://testnet.arcscan.app/address/${registryAddress}`)
 
   // ── POST-DEPLOY CHECKLIST ──────────────────────────────────
   console.log("\n═══════════════════════════════════════════")

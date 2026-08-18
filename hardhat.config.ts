@@ -38,8 +38,8 @@ const config: HardhatUserConfig = {
         network:  "arc-testnet",
         chainId:  5042002,
         urls: {
-          apiURL:    "https://atlas.blockscout.com/api",
-          browserURL: "https://atlas.blockscout.com",
+          apiURL:    "https://testnet.arcscan.app/api",
+          browserURL: "https://testnet.arcscan.app",
         },
       },
     ],

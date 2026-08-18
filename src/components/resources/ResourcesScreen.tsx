@@ -30,7 +30,7 @@ const SYSTEM_PROMPT = `You are Arcoin's helpful AI assistant. Arcoin is a DeFi p
 Key facts:
 - Arc Network uses USDC for gas (6 decimals, ERC-20 interface)
 - Arcoin features: Send USDC, Payment Streaming (Sablier V2), Token Swap (APEXISWAP), P2P Escrow, ArcID naming
-- Block explorer: atlas.blockscout.com
+- Block explorer: testnet.arcscan.app
 - Testnet faucet: faucet.circle.com
 - ArcID format: yourname.arc (registered for 1 USDC/year)
 - Payment streaming = USDC flows per-second to recipient
@@ -304,7 +304,7 @@ function LinksTab() {
     { category: "Arc Network",
       items: [
         { label: "Arc Docs",        url: "https://docs.arc.io",                          icon: "📖" },
-        { label: "Blockscout",      url: "https://atlas.blockscout.com",                 icon: "⬡"  },
+        { label: "Blockscout",      url: "https://testnet.arcscan.app",                 icon: "⬡"  },
         { label: "Testnet Faucet",  url: "https://faucet.circle.com",                    icon: "⛽" },
         { label: "Arc Network",     url: "https://arc.network",                          icon: "◈"  },
       ]

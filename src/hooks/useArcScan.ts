@@ -13,7 +13,7 @@ import { TOKENS, EXPLORER }      from "@/lib/constants"
 import { formatUSDC }            from "@/lib/usdc"
 import type { ArcTransaction }   from "@/types"
 
-const BLOCKSCOUT_API = "https://atlas.blockscout.com/api/v2"
+const BLOCKSCOUT_API = "https://testnet.arcscan.app/api/v2"
 const CACHE_KEY      = "arcoin_tx_cache"
 
 interface UseArcScan {

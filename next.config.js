@@ -20,7 +20,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://rpc.testnet.arc.network https://5042002.rpc.thirdweb.com https://atlas.blockscout.com https://*.privy.io https://*.walletconnect.com wss://*.walletconnect.com https://auth.privy.io",
+              "connect-src 'self' https://rpc.testnet.arc.network https://5042002.rpc.thirdweb.com https://testnet.arcscan.app https://*.privy.io https://*.walletconnect.com wss://*.walletconnect.com https://auth.privy.io",
               "frame-src https://*.privy.io",
             ].join("; "),
           },

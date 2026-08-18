@@ -70,8 +70,8 @@ async function main() {
   console.log(`  npx hardhat verify --network arc-testnet ${linearAddr} \\`)
   console.log(`    "${deployer.address}" "${descriptorAddr}"`)
   console.log("\n  Explorer:")
-  console.log(`  https://atlas.blockscout.com/address/${linearAddr}`)
-  console.log(`  https://atlas.blockscout.com/address/${dynamicAddr}`)
+  console.log(`  https://testnet.arcscan.app/address/${linearAddr}`)
+  console.log(`  https://testnet.arcscan.app/address/${dynamicAddr}`)
 }
 
 main().catch(err => {

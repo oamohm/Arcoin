@@ -34,8 +34,8 @@ export const arcTestnet = defineChain({
   blockExplorers: {
     default: {
       name: "Blockscout",
-      url:  "https://atlas.blockscout.com",
-      apiUrl: "https://atlas.blockscout.com/api",
+      url:  "https://testnet.arcscan.app",
+      apiUrl: "https://testnet.arcscan.app/api",
     },
     arcscan: {
       name: "ArcScan",

@@ -103,11 +103,13 @@ export const ARCOIN_CONTRACTS = {
 // EXPLORER URLs
 // ─────────────────────────────────────────────────────────────
 export const EXPLORER = {
-  primary:      "https://atlas.blockscout.com",
+  // Arc Testnet's actual Blockscout-powered explorer is testnet.arcscan.app.
+  // atlas.blockscout.com is not Arc's explorer -- links built from it 404.
+  primary:      "https://testnet.arcscan.app",
   secondary:    "https://testnet.arcscan.app",
-  txUrl:        (hash: string) => `https://atlas.blockscout.com/tx/${hash}`,
-  addressUrl:   (addr: string) => `https://atlas.blockscout.com/address/${addr}`,
-  tokenUrl:     (addr: string) => `https://atlas.blockscout.com/token/${addr}`,
+  txUrl:        (hash: string) => `https://testnet.arcscan.app/tx/${hash}`,
+  addressUrl:   (addr: string) => `https://testnet.arcscan.app/address/${addr}`,
+  tokenUrl:     (addr: string) => `https://testnet.arcscan.app/token/${addr}`,
 } as const
 
 // ─────────────────────────────────────────────────────────────

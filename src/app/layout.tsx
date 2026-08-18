@@ -72,7 +72,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-title"              content="Arcoin" />
         {/* Preconnect to Arc RPC for faster first tx */}
         <link rel="preconnect" href="https://rpc.testnet.arc.network" />
-        <link rel="preconnect" href="https://atlas.blockscout.com" />
+        <link rel="preconnect" href="https://testnet.arcscan.app" />
       </head>
       <body className="bg-arc-bg antialiased">
         <Providers>

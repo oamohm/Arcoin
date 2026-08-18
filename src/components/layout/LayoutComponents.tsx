@@ -163,7 +163,7 @@ export function MoreScreen({ onNavigate }: { onNavigate: (s: string) => void }) 
 
   const resources = [
     { label: "Get Testnet USDC",    sub: "faucet.circle.com",    icon: "⛽", href: APP.faucet     },
-    { label: "Blockscout Explorer", sub: "atlas.blockscout.com", icon: "⬡", href: "https://atlas.blockscout.com" },
+    { label: "Blockscout Explorer", sub: "testnet.arcscan.app", icon: "⬡", href: "https://testnet.arcscan.app" },
     { label: "Arc Documentation",   sub: "docs.arc.io",          icon: "📖", href: APP.arcDocs    },
     { label: "APEXISWAP DEX",       sub: "apexiswap.com",        icon: "⚡", href: APP.apexiswap  },
     { label: "Circle Developer",    sub: "developers.circle.com",icon: "◯",  href: APP.circleDev  },

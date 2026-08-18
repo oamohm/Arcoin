@@ -472,7 +472,7 @@ function ArcStats() {
         { labelKey: "dashboard.chain", value: "5042002"                               },
         { labelKey: "dashboard.gas",   value: "USDC",    color: "var(--cyan)"         },
         { labelKey: "dashboard.block", value: "~2s"                                   },
-        { labelKey: "dashboard.scan",  value: t("dashboard.scan"), link: "https://atlas.blockscout.com", color: "var(--cyan)" },
+        { labelKey: "dashboard.scan",  value: t("dashboard.scan"), link: "https://testnet.arcscan.app", color: "var(--cyan)" },
       ].map((s, i, arr) => (
         <div key={s.labelKey} style={{
           flex: 1, padding: "12px 8px", textAlign: "center",

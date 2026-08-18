@@ -90,7 +90,7 @@ function main() {
   `)
 
   console.log("Next step: npm run dev → test the app")
-  console.log(`Blockscout: https://atlas.blockscout.com/address/${c.PaymentRouter}`)
+  console.log(`Blockscout: https://testnet.arcscan.app/address/${c.PaymentRouter}`)
 }
 
 main()
