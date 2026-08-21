@@ -97,6 +97,7 @@ export const ARCOIN_CONTRACTS = {
   Registry:         "" as `0x${string}`,  // ArcID registry
   Treasury:         "" as `0x${string}`,  // ArcoinTreasury.sol
   Escrow:           "" as `0x${string}`,  // Phase 3
+  Stream:           "" as `0x${string}`,  // ArcoinStream.sol — native streaming, replaces Sablier dependency
 } as const
 
 // ─────────────────────────────────────────────────────────────
@@ -149,11 +150,5 @@ export const COMPLIANCE = {
   // trmLabsApiUrl: "https://api.trmlabs.com/public/v2/sanctions/screening",
 } as const
 
-// ─────────────────────────────────────────────────────────────
-// STREAMING — SABLIER (Phase 2)
-// Addresses pending deployment on Arc
-// ─────────────────────────────────────────────────────────────
-export const SABLIER = {
-  LockupLinear:   "" as `0x${string}`,  // to be deployed
-  LockupDynamic:  "" as `0x${string}`,  // to be deployed
-} as const
+// Streaming now runs on Arcoin's own ArcoinStream.sol contract
+// (see ARCOIN_CONTRACTS.Stream above) -- no external Sablier dependency.

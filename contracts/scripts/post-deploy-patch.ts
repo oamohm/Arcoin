@@ -59,15 +59,9 @@ function main() {
     /Escrow:\s+"" as `0x\$\{string\}`,\s*\/\/ Phase 3/,
     `Escrow:        "${c.Escrow || ""}" as \`0x\${string}\`,  // ArcoinEscrow`
   )
-
-  // ── Patch SABLIER ────────────────────────────────────────
   content = content.replace(
-    /LockupLinear:\s+"" as `0x\$\{string\}`,\s*\/\/ to be deployed/,
-    `LockupLinear:   "${c.SablierLockupLinear}" as \`0x\${string}\`,`
-  )
-  content = content.replace(
-    /LockupDynamic:\s+"" as `0x\$\{string\}`,\s*\/\/ to be deployed/,
-    `LockupDynamic:  "${c.SablierLockupDynamic}" as \`0x\${string}\`,`
+    /Stream:\s+"" as `0x\$\{string\}`,\s*\/\/ ArcoinStream\.sol.*/,
+    `Stream:        "${c.Stream}" as \`0x\${string}\`,  // ArcoinStream.sol`
   )
 
   // ── Write back ───────────────────────────────────────────
@@ -81,16 +75,12 @@ function main() {
     Registry:      "${c.Registry}"
     Treasury:      "${c.Treasury}"
     Escrow:        "${c.Escrow || "(deploy separately)"}"
-  }
-
-  SABLIER = {
-    LockupLinear:  "${c.SablierLockupLinear}"
-    LockupDynamic: "${c.SablierLockupDynamic}"
+    Stream:        "${c.Stream}"
   }
   `)
 
   console.log("Next step: npm run dev → test the app")
-  console.log(`Blockscout: https://testnet.arcscan.app/address/${c.PaymentRouter}`)
+  console.log(`ArcScan: https://testnet.arcscan.app/address/${c.PaymentRouter}`)
 }
 
 main()

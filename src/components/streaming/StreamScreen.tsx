@@ -1,7 +1,7 @@
 "use client"
 /**
  * ARCOIN — StreamScreen.tsx
- * Payment streaming interface. Wired to useSablier hook.
+ * Payment streaming interface. Wired to useArcStream hook (Arcoin's own contract).
  *
  * Features:
  *   - Create linear stream (with optional cliff)
@@ -12,7 +12,7 @@
  */
 
 import { useState, useRef, useCallback } from "react"
-import { useSablier }      from "@/hooks/useSablier"
+import { useArcStream }    from "@/hooks/useArcStream"
 import { useArcBalance }   from "@/hooks/useArcBalance"
 import { TxStatusBar }     from "@/components/ui/TxStatusBar"
 import { useToast }        from "@/components/ui/Toast"
@@ -26,7 +26,7 @@ import type { Stream, StreamRecipient } from "@/types"
 type StreamView = "list" | "create" | "bulk"
 
 export function StreamScreen({ onNavigate }: { onNavigate: (s: string) => void }) {
-  const sablier = useSablier()
+  const sablier = useArcStream()
   const balance = useArcBalance()
   const toast   = useToast()
 
@@ -112,7 +112,7 @@ export function StreamScreen({ onNavigate }: { onNavigate: (s: string) => void }
 // ── STREAM LIST ───────────────────────────────────────────────
 function StreamList({ streams, sablier, toast }: {
   streams: Stream[]
-  sablier: ReturnType<typeof useSablier>
+  sablier: ReturnType<typeof useArcStream>
   toast:   ReturnType<typeof useToast>
 }) {
   const now = Math.floor(Date.now() / 1000)
@@ -302,7 +302,7 @@ function StreamList({ streams, sablier, toast }: {
 
 // ── CREATE STREAM ─────────────────────────────────────────────
 function CreateStream({ sablier, balance, toast, onSuccess }: {
-  sablier:   ReturnType<typeof useSablier>
+  sablier:   ReturnType<typeof useArcStream>
   balance:   ReturnType<typeof useArcBalance>
   toast:     ReturnType<typeof useToast>
   onSuccess: () => void
@@ -500,7 +500,7 @@ function CreateStream({ sablier, balance, toast, onSuccess }: {
 
 // ── STREAMSPLIT — BULK PAYROLL ────────────────────────────────
 function StreamSplit({ sablier, balance, toast, onSuccess }: {
-  sablier:   ReturnType<typeof useSablier>
+  sablier:   ReturnType<typeof useArcStream>
   balance:   ReturnType<typeof useArcBalance>
   toast:     ReturnType<typeof useToast>
   onSuccess: () => void

@@ -15,7 +15,7 @@
 Arcoin is a **non-custodial DeFi payment operating system** built natively on the Arc Network. It enables users to:
 
 - **Send** USDC instantly to any address or human-readable ArcID (e.g. `alice.arc`)
-- **Stream** USDC over time using Sablier V2 token streaming
+- **Stream** USDC over time using Arcoin's own native streaming contract (ArcoinStream.sol)
 - **Swap** tokens via ApexiSwap on Arc Testnet
 - **Escrow** funds with on-chain dispute resolution
 - **Register** a human-readable ArcID (ENS-style identity for Arc)
@@ -50,7 +50,7 @@ All payments route through auditable smart contracts. No custodian. No intermedi
 │  └─────────────────┘    └──────────────────────────┘    │
 │                                                          │
 │  ┌─────────────────────────────────────────────────┐    │
-│  │              Sablier V2 (streaming)              │    │
+│  │           ArcoinStream (native streaming)         │    │
 │  │         LockupLinear · LockupDynamic             │    │
 │  └─────────────────────────────────────────────────┘    │
 │                                                          │
@@ -66,7 +66,7 @@ All payments route through auditable smart contracts. No custodian. No intermedi
 | `ArcoinTreasury` | Collects protocol fees, 72h distribution timelock, 60/25/15% allocation |
 | `ArcoinPaymentRouter` | Single entry point for all USDC payments, 0.1% fee, OFAC blocklist |
 | `ArcoinEscrow` | Non-custodial P2P escrow with arbiter + auto-refund after deadline |
-| `Sablier V2` | Token streaming — LockupLinear + LockupDynamic |
+| `ArcoinStream` | Native token streaming — no external protocol dependency |
 
 ---
 
@@ -84,7 +84,7 @@ npm --version    # v9+
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/oamohm/arcoin.git
+git clone https://github.com/oamohm/Arcoin.git
 cd arcoin
 npm install
 
@@ -163,12 +163,11 @@ npm run dev
 | ArcoinTreasury | *(deploy and fill)* |
 | ArcoinPaymentRouter | *(deploy and fill)* |
 | ArcoinEscrow | *(Phase 3)* |
-| Sablier LockupLinear | *(deploy and fill)* |
-| Sablier LockupDynamic | *(deploy and fill)* |
+| ArcoinStream | *(deploy and fill)* |
 
 > Run `contracts/scripts/post-deploy-patch.ts` to auto-fill these after deployment.
 
-**Explorer:** [atlas.blockscout.com](https://atlas.blockscout.com)  
+**Explorer:** [testnet.arcscan.app](https://testnet.arcscan.app)  
 **Faucet:** [faucet.circle.com](https://faucet.circle.com)  
 **RPC:** `https://rpc.testnet.arc.network`
 
@@ -193,7 +192,7 @@ npm run dev
 ### Vercel (Recommended)
 
 **Option A — Dashboard:**
-1. [vercel.com/new](https://vercel.com/new) → Import `oamohm/arcoin`
+1. [vercel.com/new](https://vercel.com/new) → Import `oamohm/Arcoin`
 2. Add environment variables:
    - `NEXT_PUBLIC_PRIVY_APP_ID`
    - `ANTHROPIC_API_KEY`
@@ -251,7 +250,7 @@ arcoin/
 │   ├── components/
 │   │   ├── layout/        # Shell, nav
 │   │   ├── payment/       # Send, Escrow, Swap screens
-│   │   ├── streaming/     # Sablier stream UI
+│   │   ├── streaming/     # Native streaming UI (ArcoinStream)
 │   │   ├── resources/     # Docs & links
 │   │   ├── ui/            # Toast, TxStatusBar
 │   │   └── wallet/        # ConnectScreen, Dashboard
@@ -272,7 +271,7 @@ arcoin/
 | Phase | Status | Features |
 |---|---|---|
 | Phase 1 | ✅ Complete | Wallet connect, USDC send, balance display, Blockscout links |
-| Phase 2 | ✅ Complete | Sablier streaming, ArcID registry, Escrow, Swap, Hindi i18n |
+| Phase 2 | ✅ Complete | Native ArcoinStream streaming, ArcID registry, Escrow, Swap, Hindi i18n |
 | Phase 3 | 🔜 Planned | Chainalysis compliance, multisig ownership transfer, mainnet |
 | Phase 4 | 🔜 Planned | Mobile app, push notifications |
 | Phase 5 | 🔜 Planned | AI Help (Claude) full integration |
@@ -300,7 +299,7 @@ arcoin/
 | Auth | Privy (email + embedded wallet + WalletConnect) |
 | Web3 | wagmi v2, viem v2, @tanstack/react-query |
 | Contracts | Solidity 0.8.24, OpenZeppelin, Hardhat |
-| Streaming | Sablier V2 (LockupLinear + LockupDynamic) |
+| Streaming | ArcoinStream.sol (own contract) |
 | AI | Anthropic Claude (AI Help — Phase 5) |
 | Deploy | Vercel (frontend), Hardhat (contracts) |
 | Chain | Arc Testnet — Chain ID 5042002 |
@@ -315,4 +314,4 @@ MIT — see [LICENSE](LICENSE)
 
 ## Credits
 
-Built on [Arc Network](https://arc.network) · Powered by [Sablier V2](https://sablier.com) · Auth by [Privy](https://privy.io) · Explorer by [Blockscout](https://blockscout.com)
+Built on [Arc Network](https://arc.network) · Auth by [Privy](https://privy.io) · Explorer by [ArcScan](https://testnet.arcscan.app)
