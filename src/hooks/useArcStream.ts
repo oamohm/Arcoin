@@ -139,7 +139,7 @@ export function useArcStream(): UseArcStream {
       setTxState({ status: "success", hash: createTx })
       return null
     } catch (err: any) {
-      setTxState({ status: "failed", error: { code: "tx_failed", message: err?.shortMessage || err?.message || "Stream create fail हो गया।" } })
+      setTxState({ status: "failed", error: { code: "transaction_reverted", message: err?.shortMessage || err?.message || "Stream create fail हो गया।" } })
       return null
     }
   }, [walletAddress, publicClient, streamReady, streamAddr, writeContractAsync])
@@ -166,7 +166,7 @@ export function useArcStream(): UseArcStream {
       await publicClient.waitForTransactionReceipt({ hash: tx, confirmations: 1, pollingInterval: 2000 })
       setTxState({ status: "success", hash: tx })
     } catch (err: any) {
-      setTxState({ status: "failed", error: { code: "tx_failed", message: err?.shortMessage || err?.message || "Withdraw fail हो गया।" } })
+      setTxState({ status: "failed", error: { code: "transaction_reverted", message: err?.shortMessage || err?.message || "Withdraw fail हो गया।" } })
     }
   }, [publicClient, streamReady, streamAddr, writeContractAsync])
 
@@ -181,7 +181,7 @@ export function useArcStream(): UseArcStream {
       await publicClient.waitForTransactionReceipt({ hash: tx, confirmations: 1, pollingInterval: 2000 })
       setTxState({ status: "success", hash: tx })
     } catch (err: any) {
-      setTxState({ status: "failed", error: { code: "tx_failed", message: err?.shortMessage || err?.message || "Cancel fail हो गया।" } })
+      setTxState({ status: "failed", error: { code: "transaction_reverted", message: err?.shortMessage || err?.message || "Cancel fail हो गया।" } })
     }
   }, [publicClient, streamReady, streamAddr, writeContractAsync])
 
