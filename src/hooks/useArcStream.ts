@@ -196,7 +196,7 @@ export function useArcStream(): UseArcStream {
       }) as bigint
 
       const status: Stream["status"] =
-        raw.canceled ? "canceled" : Number(raw.endTime) <= Math.floor(Date.now()/1000) ? "completed" : "active"
+        raw.canceled ? "cancelled" : Number(raw.endTime) <= Math.floor(Date.now()/1000) ? "completed" : "active"
 
       return {
         id:              streamId,
